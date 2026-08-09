@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WebAndClip | Control Panel</title>
+    <title>WebAndClip | Command Panel</title>
+    <!-- Firebase Core Cloud Database Framework SDK Libraries -->
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
     <!-- Solid Global Icons Database Link Framework -->
     <link rel="stylesheet" href="https://cloudflare.com">
     <style>
@@ -38,8 +41,8 @@
     </style>
 </head>
 <body>
-    <div id="secureOverlay" class="secure-overlay"><h2 style="color: red;"><i class="fa-solid fa-lock"></i> Verification Processing...</h2></div>
-        <!-- SIDEBAR OPERATIONAL CONTROL WITH RE-STRUCTURED TABS -->
+    <div id="secureOverlay" class="secure-overlay"><h2 style="color: red;"><i class="fa-solid fa-lock"></i> Synchronizing Cloud Core...</h2></div>
+    <!-- SIDEBAR OPERATIONAL MENU NAVIGATION CONTROL -->
     <div class="sidebar">
         <div class="sidebar-brand">Web&<span>Clip</span></div>
         <ul class="sidebar-menu">
@@ -52,7 +55,7 @@
         <button class="logout-btn" onclick="handleLogout()"><i class="fa-solid fa-right-from-bracket"></i> Panel Logout</button>
     </div>
 
-    <!-- DATA VIEWS LAYOUT CONFIGURATIONS -->
+    <!-- MAIN DASHBOARD CONTENT AREA -->
     <div class="main-content">
         <div class="content-header">
             <h1>WebAndClip Admin Control Center</h1>
@@ -69,8 +72,8 @@
             .badge-web { background: rgba(0, 150, 255, 0.1); color: #0096ff; }
             .btn-sm { padding: 6px 12px; border-radius: 4px; border: none; cursor: pointer; font-weight: 600; font-size: 13px; margin-right: 5px; transition: 0.2s; }
             .btn-edit { background: #ffaa00; color: black; }
-            .btn-complete { background: #00FF66; color: black; } /* Order Complete (Sabz) */
-            .btn-cancel { background: #FF3333; color: white; } /* Order Cancel (Surkh) */
+            .btn-complete { background: #00FF66; color: black; }
+            .btn-cancel { background: #FF3333; color: white; }
             .btn-delete { background: var(--danger-color); color: white; }
             .btn-sm:hover { opacity: 0.8; transform: translateY(-1px); }
             .tab-panel { display: none; } .tab-panel.active { display: block; }
@@ -79,7 +82,7 @@
             .reply-box input { flex: 1; padding: 10px; background: #222; border: 1px solid #333; color: white; border-radius: 4px; outline: none; }
         </style>
 
-        <!-- PANEL 1: INCOMING CLIENT ORDERS WITH RE-DESIGNED ACTION CONTROL -->
+        <!-- PANEL 1: CLIENT DETAILED RE-DESIGNED ACTIVE ORDERS -->
         <div id="panel-orders" class="tab-panel active">
             <div class="dashboard-card">
                 <h3>Incoming Project Orders Database</h3>
@@ -93,7 +96,8 @@
                 </div>
             </div>
         </div>
-        <!-- PANEL 2: MULTI HERO BANNER CRUD CONTROLS -->
+
+        <!-- PANEL 2: MULTI HERO BANNER CONTROLS -->
         <div id="panel-banner" class="tab-panel">
             <div class="dashboard-card">
                 <h3 id="banner-form-title"><i class="fa-solid fa-plus-circle"></i> Add New Video Banner / Showreel</h3>
@@ -113,24 +117,25 @@
                 <h3>Active Video Banners Slider Database</h3>
                 <div class="data-table-box">
                     <table class="data-table">
-                        <thead>
-                            <tr><th>Banner Link Resource</th><th>Actions Control</th></tr>
-                        </thead>
+                        <thead><tr><th>Banner Link Resource</th><th>Actions Control</th></tr></thead>
                         <tbody id="admin-banner-list"></tbody>
                     </table>
                 </div>
             </div>
         </div>
-
-        <!-- PANEL 3: PORTFOLIO ASSET ACTIONS -->
+        <!-- PANEL 3: DUAL CHOICE PORTFOLIO MANAGEMENT MODULE -->
         <div id="panel-portfolio" class="tab-panel">
             <div class="dashboard-card">
                 <h3 id="form-title"><i class="fa-solid fa-plus-circle"></i> Add / Edit Portfolio Item</h3>
                 <form id="portfolioForm" class="dashboard-form">
                     <input type="hidden" id="edit-id">
-                    <div class="form-box"><label>Project Type</label><select id="item-type" required><option value="video">Video Editing</option><option value="web">Web Designing (Screenshot Image Link)</option></select></div>
+                    <div class="form-box"><label>Project Type</label><select id="item-type" required><option value="video">Video Editing Project</option><option value="web">Web Designing Project</option></select></div>
                     <div class="form-box"><label>Project Title</label><input type="text" id="item-title" placeholder="Title Description" required></div>
-                    <div class="form-box"><label>Link / URL Asset Resource</label><input type="url" id="item-link" placeholder="Source URL Link" required></div>
+                    
+                    <!-- DUAL TRACK SELECTION DESIGN: Links aur upload dono choices live rakh di hain -->
+                    <div class="form-box"><label>Option A: Paste Live URL Link (YouTube / Web Asset)</label><input type="url" id="item-link" placeholder="Source URL Link"></div>
+                    <div class="form-box"><label>Option B: OR Upload Raw Media File (Image / Video File)</label><input type="file" id="item-file" accept="image/*, video/*" onchange="processPortfolioFile(this)"></div>
+                    
                     <div><button type="submit" id="save-btn" class="action-btn">Save Asset</button><button type="button" id="cancel-btn" class="action-btn cancel-btn" onclick="resetForm()">Cancel</button></div>
                 </form>
             </div>
@@ -138,7 +143,7 @@
                 <h3>Portfolio Showcase Base</h3>
                 <div class="data-table-box">
                     <table class="data-table">
-                        <thead><tr><th>Type</th><th>Project Title</th><th>Link</th><th>Actions</th></tr></thead>
+                        <thead><tr><th>Type</th><th>Project Title</th><th>Media Asset Link/File</th><th>Actions</th></tr></thead>
                         <tbody id="admin-portfolio-list"></tbody>
                     </table>
                 </div>
@@ -159,28 +164,34 @@
                 <h3>Update Security Credentials</h3>
                 <form id="passwordForm" style="display: flex; flex-direction: column; gap: 15px;">
                     <div class="form-box"><label>Admin User ID</label><input type="text" id="current-user" required></div>
-                    <div class="form-box"><label>New Access Password</label><input type="password" id="new-pass" placeholder="Enter new code parameter" required></div>
+                    <div class="form-box"><label>New Access Password</label><input type="password" id="new-pass" placeholder="Enter new password code" required></div>
                     <button type="submit" class="action-btn">Update Terminal Keys</button>
                 </form>
             </div>
         </div>
     </div>
-    <!-- DATA ENGINES OPERATIONS CONTROLLER WITH COMPLETE, CANCEL, & PURGE TRIPLE ACTION SYSTEM -->
+    <!-- REAL CLOUD DRIVE CONTROLLER SCRIPT SYSTEMS AND TIMEOUT ENGINES -->
     <script>
         if (localStorage.getItem('adminLogged') !== 'true') { window.location.href = 'login.html'; } 
         else { document.getElementById('secureOverlay').style.display = 'none'; }
 
         let idleTimer;
         function resetIdleTimer() { clearTimeout(idleTimer); idleTimer = setTimeout(triggerAutoLogout, 60000); }
-        function triggerAutoLogout() { localStorage.removeItem('adminLogged'); alert('Security System Broadcast:\n\nDashboard has been inactive for 1 minute. Automatically logged out.'); window.location.href = 'login.html'; }
+        function triggerAutoLogout() { localStorage.removeItem('adminLogged'); alert('Security Inactivity Timeout: Inactive for 1 minute. Automatically logged out.'); window.location.href = 'login.html'; }
 
-        let dbEngine;
-        const requestDB = indexedDB.open("StudioReceiptsWarehouse", 1);
-        requestDB.onsuccess = function(e) { dbEngine = e.target.result; renderOrders(); renderPortfolio(); renderReviews(); renderBanners(); };
+        // ☁️ INITIALIZE GOOGLE CLOUD FIREBASE LIVE INTEGRATION LOCK
+        const firebaseConfig = { databaseURL: "https://firebaseio.com" };
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const cloudDatabase = firebase.database();
+
+        let globalPortfolioFileRaw = "";
 
         window.onload = function() {
             resetIdleTimer();
             document.onmousemove = resetIdleTimer; document.onkeypress = resetIdleTimer; document.onclick = resetIdleTimer; document.onscroll = resetIdleTimer;
+            
+            // Listen to Google realtime node branches changes dynamically
+            listenCloudOrders(); listenCloudPortfolio(); listenCloudReviews();
             document.getElementById('current-user').value = localStorage.getItem('adminUser') || 'Moazzam';
         };
 
@@ -191,214 +202,160 @@
 
         function handleLogout() { localStorage.removeItem('adminLogged'); window.location.href = 'index.html'; }
 
-        // UPDATED PROJECTS DATABASE INJECTS HIGHLY REQUESTED TRIPLE ACTION WORKFLOW PANEL
-        function renderOrders() {
-            const list = document.getElementById('admin-orders-list'); let orders = JSON.parse(localStorage.getItem('orders')) || []; list.innerHTML = '';
-            if(orders.length === 0) { list.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">No incoming project orders found.</td></tr>'; return; }
-            orders.forEach(ord => {
-                const tr = document.createElement('tr');
-                let statusLabelHTML = ord.status ? `<br><span style="font-size:11px; font-weight:700; color:${ord.status==='Completed'?'#00FF66':'#FF3333'}">Track Status: ${ord.status}</span>` : '';
-                tr.innerHTML = `
-                    <td>Name: <strong>${ord.name}</strong>${statusLabelHTML}<br><span style="font-size:12px;color:var(--text-muted);">Method: <strong>${ord.contactApp || 'WhatsApp'}</strong><br>Contact: ${ord.phone}<br>Email: ${ord.email}</span></td>
-                    <td><span class="badge badge-web">${ord.service}</span></td>
-                    <td><span style="color:var(--accent-color); font-weight:700;">${ord.budget}</span></td>
-                    <td><button class="btn-sm btn-edit" style="padding:5px 10px;font-size:12px;" onclick="extractAndOpenWarehouseSlip('${ord.id}')">Open File Proof 📄</button></td>
-                    <td><p style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${ord.details}">${ord.details}</p></td>
-                    <td>
-                        <!-- Complete, Cancel, aur dynamic Trash can Icon wala Delete button align kar dia ha -->
-                        <div style="display: flex; gap: 5px; margin-bottom: 5px;">
-                            <button class="btn-sm btn-complete" style="flex: 1;" onclick="changeOrderStatus('${ord.id}', 'Completed')">Complete</button>
-                            <button class="btn-sm btn-cancel" style="flex: 1;" onclick="changeOrderStatus('${ord.id}', 'Cancelled')">Cancel</button>
-                        </div>
-                        <button class="btn-sm btn-delete" style="display:block; width:100%; text-align:center; background:#FF3333 !important;" onclick="removeAndPurgeOrder('${ord.id}')"><i class="fa-solid fa-trash-can"></i> Delete Order Record</button>
-                    </td>
-                `;
-                list.appendChild(tr);
+        // Process raw background files for portfolios upload modules
+        function processPortfolioFile(input) {
+            if(input.files && input.files) {
+                const reader = new FileReader();
+                reader.onload = function(e) { globalPortfolioFileRaw = e.target.result; };
+                reader.readAsDataURL(input.files);
+            }
+        }
+
+        // FETCH ACTIVE INCOMING PROJECTS LOGS DIRECT FROM GOOGLE CLOUD NODE
+        function listenCloudOrders() {
+            cloudDatabase.ref('orders').on('value', function(snapshot) {
+                const list = document.getElementById('admin-orders-list'); list.innerHTML = '';
+                let orders = snapshot.val();
+                if(!orders) { list.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">No incoming project orders found.</td></tr>'; return; }
+                
+                Object.values(orders).forEach(ord => {
+                    const tr = document.createElement('tr');
+                    let statusLabelHTML = ord.status ? `<br><span style="font-size:11px; font-weight:700; color:${ord.status==='Completed'?'#00FF66':'#FF3333'}">Track Status: ${ord.status}</span>` : '';
+                    
+                    tr.innerHTML = `
+                        <td>Name: <strong>${ord.name}</strong>${statusLabelHTML}<br><span style="font-size:12px;color:var(--text-muted);">Method: <strong>${ord.contactApp || 'WhatsApp'}</strong><br>Contact: ${ord.phone}<br>Email: ${ord.email}</span></td>
+                        <td><span class="badge badge-web">${ord.service}</span></td>
+                        <td><span style="color:var(--accent-color); font-weight:700;">${ord.budget}</span></td>
+                        <td><button class="btn-sm btn-edit" onclick="viewCloudSlip('${ord.id}')">Open File Proof 📄</button></td>
+                        <td><p style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${ord.details}">${ord.details}</p></td>
+                        <td>
+                            <div style="display: flex; gap: 5px; margin-bottom: 5px;">
+                                <button class="btn-sm btn-complete" style="flex: 1;" onclick="updateCloudOrderStatus('${ord.id}', 'Completed')">Complete</button>
+                                <button class="btn-sm btn-cancel" style="flex: 1;" onclick="updateCloudOrderStatus('${ord.id}', 'Cancelled')">Cancel</button>
+                            </div>
+                            <button class="btn-sm btn-delete" style="display:block; width:100%; background:#FF3333 !important;" onclick="purgeCloudOrder('${ord.id}')"><i class="fa-solid fa-trash-can"></i> Delete Order Record</button>
+                        </td>
+                    `;
+                    list.appendChild(tr);
+                });
             });
         }
 
-        function extractAndOpenWarehouseSlip(orderId) {
-            let transaction = dbEngine.transaction(["slipsStore"], "readonly"); let warehouse = transaction.objectStore("slipsStore"); let fetchRequest = warehouse.get(String(orderId));
-            fetchRequest.onsuccess = function(e) {
-                let assetRecord = e.target.result;
-                if(assetRecord && assetRecord.rawBlob) { const finalLiveBlobUrl = URL.createObjectURL(assetRecord.rawBlob); window.open(finalLiveBlobUrl, '_blank'); } 
-                else { alert('Data Alert: This specific order record was created under the past crashed storage system.'); }
-            };
+        function viewCloudSlip(orderId) {
+            cloudDatabase.ref('orders/' + orderId).once('value', function(snapshot) {
+                let ord = snapshot.val();
+                if(ord && ord.receipt) {
+                    const newWindow = window.open();
+                    newWindow.document.write('<title>Payment Slip Reference Check</title><body style="margin:0;background:#000;display:flex;justify-content:center;align-items:center;"><img src="' + ord.receipt + '" style="max-width:100%;max-height:100vh;object-fit:contain;"></body>');
+                } else { alert('Error: Slip data damaged or missing.'); }
+            });
         }
 
-        function changeOrderStatus(orderId, nextStatus) {
-            if(confirm(`Mark project order as "${nextStatus}"?`)) {
-                let orders = JSON.parse(localStorage.getItem('orders')) || [];
-                orders = orders.map(o => { if(o.id == orderId) { o.status = nextStatus; } return o; });
-                localStorage.setItem('orders', JSON.stringify(orders)); renderOrders();
+        function updateCloudOrderStatus(orderId, statusValue) {
+            if(confirm(`Mark project status as "${statusValue}"?`)) {
+                cloudDatabase.ref('orders/' + orderId).update({ status: statusValue });
             }
         }
 
-        // 🗑️ PERMANENT PURGE ORDER FUNCTION (Completely wipes out record from table and warehouse index)
-        function removeAndPurgeOrder(orderId) {
-            if(confirm('Warning: Kya aap waqai is project order data entry ko hamesha ke liye dashboard se permanently delete karna chahte hain?')) {
-                let orders = JSON.parse(localStorage.getItem('orders')) || [];
-                orders = orders.filter(o => o.id != orderId);
-                localStorage.setItem('orders', JSON.stringify(orders));
-                
-                let transaction = dbEngine.transaction(["slipsStore"], "readwrite");
-                let warehouse = transaction.objectStore("slipsStore");
-                warehouse.delete(String(orderId));
-                
-                transaction.oncomplete = function() {
-                    renderOrders();
-                    alert('Order log wiped out successfully!');
-                };
+        function purgeCloudOrder(orderId) {
+            if(confirm('Warning: Kya aap waqai is project order data entry ko Google Cloud Database se permanently delete karna chahte hain?')) {
+                cloudDatabase.ref('orders/' + orderId).remove(function(err) {
+                    if(!err) { alert('Order record purged successfully from global cloud network!'); }
+                });
             }
         }
-
-        // INTEGRATED STABILIZED BANNER SYNCHRONIZER LAYERS
+        // BANNERS CAROUSEL CRUD HANDLERS
         document.getElementById('bannerForm').addEventListener('submit', function(e) {
-            e.preventDefault(); const editBannerId = document.getElementById('edit-banner-id').value; const linkVal = document.getElementById('bannerVideoLink').value.trim();
-            let banners = JSON.parse(localStorage.getItem('studioBanners')) || ["https://youtube.com"];
-            if (editBannerId !== "") { banners[parseInt(editBannerId)] = linkVal; alert('Banner link location modified.'); } 
-            else { banners.push(linkVal); alert('New showreel banner appended.'); }
-            localStorage.setItem('studioBanners', JSON.stringify(banners)); resetBannerForm(); renderBanners();
+            e.preventDefault();
+            const editBannerId = document.getElementById('edit-banner-id').value;
+            const linkVal = document.getElementById('bannerVideoLink').value.trim();
+            
+            if(editBannerId !== "") {
+                cloudDatabase.ref('studioBanners/' + editBannerId).set(linkVal, function() { alert('Banner link location modified.'); resetBannerForm(); });
+            } else {
+                const uniqueKey = cloudDatabase.ref('studioBanners').push().key;
+                cloudDatabase.ref('studioBanners/' + uniqueKey).set(linkVal, function() { alert('New banner appended.'); resetBannerForm(); });
+            }
         });
 
         function renderBanners() {
-            const list = document.getElementById('admin-banner-list'); let banners = JSON.parse(localStorage.getItem('studioBanners')) || ["https://youtube.com"]; list.innerHTML = '';
-            banners.forEach((link, idx) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td><a href="${link}" target="_blank" style="color:var(--accent-color); text-decoration:none; font-size:13px;">${link}</a></td><td><button class="btn-sm btn-edit" onclick="editBanner(${idx})">Update</button><button class="btn-sm btn-delete" onclick="deleteFixedBanner(${idx})">Delete Banner</button></td>`;
-                list.appendChild(tr);
+            cloudDatabase.ref('studioBanners').on('value', function(snapshot) {
+                const list = document.getElementById('admin-banner-list'); list.innerHTML = '';
+                let banners = snapshot.val();
+                if(!banners) return;
+                Object.entries(banners).forEach(([key, link]) => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td><a href="${link}" target="_blank" style="color:var(--accent-color); text-size:13px;">${link}</a></td><td><button class="btn-sm btn-edit" onclick="editBanner('${key}', '${link}')">Update</button><button class="btn-sm btn-delete" onclick="deleteCloudBanner('${key}')">Delete Banner</button></td>`;
+                    list.appendChild(tr);
+                });
             });
         }
 
-        function editBanner(index) {
-            let banners = JSON.parse(localStorage.getItem('studioBanners')) || ["https://youtube.com"];
-            document.getElementById('edit-banner-id').value = index; document.getElementById('bannerVideoLink').value = banners[index];
-            document.getElementById('banner-form-title').innerText = 'Modify Video Banner Link'; document.getElementById('save-banner-btn').innerText = 'Update Banner'; document.getElementById('cancel-banner-btn').style.display = 'inline-block';
-        }
+        function editBanner(key, link) { document.getElementById('edit-banner-id').value = key; document.getElementById('bannerVideoLink').value = link; document.getElementById('banner-form-title').innerText = 'Modify Video Banner Link'; document.getElementById('save-banner-btn').innerText = 'Update Banner'; document.getElementById('cancel-banner-btn').style.display = 'inline-block'; }
+        function deleteCloudBanner(key) { if(confirm('Delete video banner from cloud slider?')) { cloudDatabase.ref('studioBanners/' + key).remove(); } }
+        function resetBannerForm() { document.getElementById('bannerForm').reset(); document.getElementById('edit-banner-id').value = ""; document.getElementById('banner-form-title').innerText = 'Add New Video Banner / Showreel'; document.getElementById('save-banner-btn').innerText = 'Save Banner'; document.getElementById('cancel-banner-btn').style.display = 'none'; }
 
-        function deleteFixedBanner(index) {
-            let banners = JSON.parse(localStorage.getItem('studioBanners')) || ["https://youtube.com"];
-            if (banners.length <= 1) { alert('Operation Blocked: Minimum one banner link is required.'); return; }
-            if (confirm('Delete this video banner permanently from carousel?')) { banners.splice(index, 1); localStorage.setItem('studioBanners', JSON.stringify(banners)); renderBanners(); alert('Banner link deleted successfully!'); }
-        }
-
-        function resetBannerForm() { document.getElementById('bannerForm').reset(); document.getElementById('edit-banner-id').value = ""; document.getElementById('banner-form-title').innerText = 'Add New Video Banner / Showreel'; document.getElementById('save-banner-btn').innerText = 'Save Banner'; document.getElementById('cancel-banner-btn').style.display = 'none'; 
-            
-        }
-                // PORTFOLIO ASSET BUILD MECHANICS (CRUD)
-        const defaultPortfolio = [
-            { id: 1, type: 'video', title: 'Cinematic Travel Video', link: 'https://youtube.com' },
-            { id: 2, type: 'web', title: 'E-Commerce Clean Layout', link: 'https://unsplash.com' }
-        ];
-
+        // DUAL SELECTION PORTFOLIO OPERATIONS ENGINE (CRUD CONTROL)
         document.getElementById('portfolioForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const editId = document.getElementById('edit-id').value; 
-            const type = document.getElementById('item-type').value; 
-            const title = document.getElementById('item-title').value.trim(); 
-            const link = document.getElementById('item-link').value.trim();
-            let portfolio = JSON.parse(localStorage.getItem('portfolio')) || defaultPortfolio;
-            
-            if (editId) { 
-                portfolio = portfolio.map(i => i.id == editId ? { id: parseInt(editId), type, title, link } : i); 
-                alert('Asset structure modified.'); 
-            } else { 
-                portfolio.push({ id: Date.now(), type, title, link }); 
-                alert('New asset appended.'); 
+            const editId = document.getElementById('edit-id').value;
+            const type = document.getElementById('item-type').value;
+            const title = document.getElementById('item-title').value.trim();
+            const urlLink = document.getElementById('item-link').value.trim();
+
+            let finalMediaAssetLocation = urlLink || globalPortfolioFileRaw;
+            if(!finalMediaAssetLocation) { alert('Validation Error: Select option A or provide an input media option B file.'); return; }
+
+            if(editId) {
+                cloudDatabase.ref('portfolio/' + editId).update({ type, title, link: finalMediaAssetLocation }, function() { alert('Portfolio modified.'); resetForm(); });
+            } else {
+                const newKey = cloudDatabase.ref('portfolio').push().key;
+                cloudDatabase.ref('portfolio/' + newKey).set({ id: newKey, type, title, link: finalMediaAssetLocation }, function() { alert('New portfolio appended into database server.'); resetForm(); });
             }
-            localStorage.setItem('portfolio', JSON.stringify(portfolio)); 
-            resetForm(); 
-            renderPortfolio();
         });
 
-        function renderPortfolio() {
-            const list = document.getElementById('admin-portfolio-list'); 
-            let portfolio = JSON.parse(localStorage.getItem('portfolio')) || defaultPortfolio; 
-            list.innerHTML = '';
-            portfolio.forEach(i => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td><span class="badge ${i.type==='video'?'badge-video':'badge-web'}">${i.type==='video'?'Video':'Web'}</span></td><td><strong>${i.title}</strong></td><td><a href="${i.link}" target="_blank" style="color:var(--accent-color);">Link Asset</a></td><td><button class="btn-sm btn-edit" onclick="editPortfolio(${i.id})">Update</button><button class="btn-sm btn-delete" onclick="deletePortfolio(${i.id})">Delete</button></td>`;
-                list.appendChild(tr);
+        function listenCloudPortfolio() {
+            cloudDatabase.ref('portfolio').on('value', function(snapshot) {
+                const list = document.getElementById('admin-portfolio-list'); list.innerHTML = '';
+                let portfolio = snapshot.val(); if(!portfolio) return;
+                Object.values(portfolio).forEach(i => {
+                    const tr = document.createElement('tr');
+                    let truncText = i.link.length > 40 ? i.link.substring(0, 40) + "..." : i.link;
+                    tr.innerHTML = `<td><span class="badge ${i.type==='video'?'badge-video':'badge-web'}">${i.type}</span></td><td><strong>${i.title}</strong></td><td><span style="font-size:12px;color:var(--text-muted);">${truncText}</span></td><td><button class="btn-sm btn-edit" onclick="editPortfolio('${i.id}')">Update</button><button class="btn-sm btn-delete" onclick="deleteCloudPortfolio('${i.id}')">Delete</button></td>`;
+                    list.appendChild(tr);
+                });
             });
+            renderBanners();
         }
 
         function editPortfolio(id) {
-            let portfolio = JSON.parse(localStorage.getItem('portfolio')) || defaultPortfolio; 
-            const i = portfolio.find(item => item.id == id);
-            if (i) { 
-                document.getElementById('edit-id').value = i.id; 
-                document.getElementById('item-type').value = i.type; 
-                document.getElementById('item-title').value = i.title; 
-                document.getElementById('item-link').value = i.link; 
-                document.getElementById('form-title').innerText = 'Modify Portfolio Asset'; 
-                document.getElementById('save-btn').innerText = 'Update Asset'; 
-                document.getElementById('cancel-btn').style.display = 'inline-block'; 
-                window.scrollTo({ top: 0, behavior: 'smooth' }); 
-            }
-        }
-
-        function deletePortfolio(id) { 
-            if(confirm('Delete this asset entry?')) { 
-                let p = JSON.parse(localStorage.getItem('portfolio')) || defaultPortfolio; 
-                localStorage.setItem('portfolio', JSON.stringify(p.filter(i => i.id != id))); 
-                renderPortfolio(); 
-            } 
-        }
-
-        function resetForm() { 
-            document.getElementById('portfolioForm').reset(); 
-            document.getElementById('edit-id').value = ''; 
-            document.getElementById('form-title').innerText = 'Add / Edit Portfolio Item'; 
-            document.getElementById('save-btn').innerText = 'Save Asset'; 
-            document.getElementById('cancel-btn').style.display = 'none'; 
-        }
-
-        // REVIEWS POST RESPONSE PANEL LOGIC
-        function renderReviews() {
-            const list = document.getElementById('admin-reviews-list'); 
-            let reviews = JSON.parse(localStorage.getItem('reviews')) || []; 
-            list.innerHTML = '';
-            if (reviews.length === 0) { 
-                list.innerHTML = '<p style="color:var(--text-muted)">No feedbacks loaded.</p>'; 
-                return; 
-            }
-            reviews.forEach(rev => {
-                const card = document.createElement('div'); 
-                card.className = 'manage-card';
-                let starHTML = ''; 
-                for(let idx=1; idx<=5; idx++) { 
-                    starHTML += idx <= rev.rating ? `<svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:var(--star-color);margin-right:2px;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>` : `<svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:#444;margin-right:2px;"><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></svg>`; 
-                }
-                let currentReplyHTML = rev.reply ? `<p style="margin-top:10px; color:var(--accent-color)"><strong>Your Response:</strong> "${rev.reply}"</p>` : '';
-                card.innerHTML = `<div style="display:flex; justify-content:space-between;"><h4>${rev.name}</h4><button class="btn-sm btn-delete" onclick="deleteReview(${rev.id})">Delete</button></div><div style="margin:5px 0;">${starHTML}</div><p style="color:#ddd;">"${rev.message}"</p>${currentReplyHTML}<div class="reply-box"><input type="text" id="reply-input-${rev.id}" placeholder="Type reply parameters..."><button class="action-btn" style="height:38px; padding:0 15px;" onclick="submitReply(${rev.id})">Post Reply</button></div>`;
-                list.appendChild(card);
+            cloudDatabase.ref('portfolio/' + id).once('value', function(snapshot) {
+                let i = snapshot.val();
+                if(i) { document.getElementById('edit-id').value = i.id; document.getElementById('item-type').value = i.type; document.getElementById('item-title').value = i.title; if(i.link.startsWith('http')) { document.getElementById('item-link').value = i.link; } document.getElementById('form-title').innerText = 'Modify Portfolio Asset'; document.getElementById('save-btn').innerText = 'Update Asset'; document.getElementById('cancel-btn').style.display = 'inline-block'; window.scrollTo({ top: 0, behavior: 'smooth' }); }
             });
         }
 
-        function submitReply(id) {
-            const txt = document.getElementById(`reply-input-${id}`).value.trim(); 
-            if(!txt) { alert('Type verification reply text.'); return; }
-            let r = JSON.parse(localStorage.getItem('reviews')) || []; 
-            localStorage.setItem('reviews', JSON.stringify(r.map(rev => rev.id == id ? { ...rev, reply: txt } : rev)));
-            renderReviews(); 
-            alert('Reply live integration compiled.');
+        function deleteCloudPortfolio(id) { if(confirm('Delete portfolio entry from cloud database?')) { cloudDatabase.ref('portfolio/' + id).remove(); } }
+        function resetForm() { document.getElementById('portfolioForm').reset(); document.getElementById('edit-id').value = ''; globalPortfolioFileRaw = ""; document.getElementById('form-title').innerText = 'Add / Edit Portfolio Item'; document.getElementById('save-btn').innerText = 'Save Asset'; document.getElementById('cancel-btn').style.display = 'none'; }
+
+        // REVIEWS POST FEEDBACK MANAGER
+        function listenCloudReviews() {
+            cloudDatabase.ref('reviews').on('value', function(snapshot) {
+                const list = document.getElementById('admin-reviews-list'); list.innerHTML = '';
+                let reviews = snapshot.val(); if(!reviews) { list.innerHTML = '<p style="color:var(--text-muted)">No feedbacks loaded.</p>'; return; }
+                Object.values(reviews).forEach(rev => {
+                    const card = document.createElement('div'); card.className = 'manage-card';
+                    let starHTML = ''; for(let idx=1; idx<=5; idx++) { starHTML += idx <= rev.rating ? `<i class="fa-solid fa-star" style="color:var(--star-color);margin-right:2px;"></i>` : `<i class="fa-regular fa-star" style="color:#444;margin-right:2px;"></i>`; }
+                    let currentReplyHTML = rev.reply ? `<p style="margin-top:10px; color:var(--accent-color)"><strong>Your Response:</strong> "${rev.reply}"</p>` : '';
+                    card.innerHTML = `<div style="display:flex; justify-content:space-between;"><h4>${rev.name}</h4><button class="btn-sm btn-delete" onclick="deleteCloudReview('${rev.id}')">Delete</button></div><div style="margin:5px 0;">${starHTML}</div><p style="color:#ddd;">"${rev.message}"</p>${currentReplyHTML}<div class="reply-box"><input type="text" id="reply-input-${rev.id}" placeholder="Type reply parameters..."><button class="action-btn" style="height:38px; padding:0 15px;" onclick="submitCloudReply('${rev.id}')">Post Reply</button></div>`;
+                    list.appendChild(card);
+                });
+            });
         }
 
-        function deleteReview(id) { 
-            if(confirm('Delete review record entry?')) { 
-                let r = JSON.parse(localStorage.getItem('reviews')) || []; 
-                localStorage.setItem('reviews', JSON.stringify(r.filter(rev => rev.id != id))); 
-                renderReviews(); 
-            } 
-        }
-
-        document.getElementById('passwordForm').addEventListener('submit', function(e) {
-            e.preventDefault(); 
-            localStorage.setItem('adminUser', document.getElementById('current-user').value.trim()); 
-            localStorage.setItem('adminPass', document.getElementById('new-pass').value);
-            alert('Security access variables changed.'); 
-            document.getElementById('new-pass').value = '';
-        });
+        function submitCloudReply(id) { const txt = document.getElementById(`reply-input-${id}`).value.trim(); if(!txt) { alert('Type text first.'); return; } cloudDatabase.ref('reviews/' + id).update({ reply: txt }, function() { alert('Reply integration updated!'); }); }
+        function deleteCloudReview(id) { if(confirm('Delete review?')) { cloudDatabase.ref('reviews/' + id).remove(); } }
+        document.getElementById('passwordForm').addEventListener('submit', function(e) { e.preventDefault(); localStorage.setItem('adminUser', document.getElementById('current-user').value.trim()); localStorage.setItem('adminPass', document.getElementById('new-pass').value); alert('Credentials local mapping token changed.'); document.getElementById('new-pass').value = ''; });
     </script>
 </body>
 </html>
