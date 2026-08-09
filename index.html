@@ -762,7 +762,7 @@
             activeSlideIndex = (activeSlideIndex + direction + slides.length) % slides.length;
             slides[activeSlideIndex].classList.add('active');
         }
-        // GOOGLE CLOUD ORDERS PUSHER & PORTFOLIO ENGINE RENDERER
+        // COMPRESSED STRICT HIGH RESOLUTION SUBMISSION HOOK
         document.getElementById('orderForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const emailIn = document.getElementById('orderEmail').value.trim();
@@ -771,11 +771,11 @@
             const preferredMethod = document.getElementById('orderContactMethod').value;
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-            if(!document.getElementById('orderName').value.trim()) { alert('Please enter your full name.'); return; }
-            if(!emailRegex.test(emailIn)) { alert('Validation Error: Provide valid email template.'); document.getElementById('orderEmail').focus(); return; }
-            if(!serviceIn) { alert('Validation Error: Choose a service track.'); return; }
-            if(isNaN(budgetIn) || budgetIn < 50) { alert('Budget Block: Minimum baseline value is $50 USD.'); return; }
-            if(!globalReceiptFileBlob) { alert('File Missing: Upload valid receipt slip (PNG, JPG, PDF).'); return; }
+            if(!document.getElementById('orderName').value.trim()) { alert('Please enter your name.'); return; }
+            if(!emailRegex.test(emailIn)) { alert('Validation Error: Provide real corporate email address.'); document.getElementById('orderEmail').focus(); return; }
+            if(!serviceIn) { alert('Validation Error: Select service category track.'); return; }
+            if(isNaN(budgetIn) || budgetIn < 50) { alert('Budget Error: Minimum required tier is $50 USD.'); return; }
+            if(!globalReceiptFileBlob) { alert('File Error: Payment reference proof slip is mandatory.'); return; }
 
             let combinedFinalContactHandle = "";
             if (preferredMethod === "WhatsApp") {
@@ -802,11 +802,11 @@
                 email: emailIn,
                 service: serviceIn,
                 budget: "$" + budgetIn,
-                receipt: globalReceiptFileBlob, // Permanent Uncrashable Storage Data
+                receipt: globalReceiptFileBlob, 
                 details: document.getElementById('orderDetails').value,
                 status: "Pending"
             }, function(error) {
-                if(error) { alert('Cloud network communication sync timeout error.'); } 
+                if(error) { alert('Cloud network communication sync timeout error. Check database security rules!'); } 
                 else {
                     document.getElementById('orderForm').reset(); globalReceiptFileBlob = null;
                     document.getElementById('uploadLabelMessage').innerText = "Click to Browse Payment Receipt (JPG, PNG, PDF)";
@@ -879,7 +879,8 @@
                 } else {
                     itemDiv.style.cursor = 'pointer';
                     itemDiv.onclick = function() { window.open(item.link, '_blank'); };
-                    let previewImg = item.fileData || "https://unsplash.com";
+                    let previewImg = item.link; // Direct link or base64 file data can render seamlessly
+                    if(!previewImg.startsWith('http') && !previewImg.startsWith('data:')) previewImg = "https://unsplash.com";
                     itemDiv.innerHTML = `<img src="${previewImg}" alt="${item.title}" onerror="this.src='https://placehold.co'"><div class="portfolio-info"><h4>${item.title} <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:var(--accent-color);display:inline-block;margin-left:5px;"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg></h4><p style="color:var(--accent-color);">Click to Open Live Project Website</p></div>`;
                 }
                 display.appendChild(itemDiv);
@@ -890,4 +891,3 @@
     </script>
 </body>
 </html>
-a
