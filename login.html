@@ -4,9 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebAndClip | Terminal Gate</title>
-    <!-- Firebase Cloud SDK Infrastructure Core Links -->
-    <script src="https://gstatic.com"></script>
-    <script src="https://gstatic.com"></script>
+    <!-- Solid Universal FontAwesome Icons Link Framework -->
+    <link rel="stylesheet" href="https://cloudflare.com">
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', sans-serif; }
         body { background:#050505; color:white; display:flex; justify-content:center; align-items:center; min-height:100vh; }
@@ -14,66 +13,90 @@
         .login-card h2 { font-size:26px; margin-bottom:10px; font-weight:800; text-align:center; }
         .login-card h2 span { color:#00FF66; }
         .login-card p { color:#a0A0a0; text-align:center; font-size:14px; margin-bottom:25px; }
-        .form-box { display:flex; flex-direction:column; gap:8px; margin-bottom:20px; }
+        .form-box { display:flex; flex-direction:column; gap:8px; margin-bottom:20px; position: relative; }
         .form-box label { font-size:13px; color:#a0a0a0; }
-        .form-box input { padding:14px; background:#1c1c1c; border:1px solid #333; color:white; border-radius:6px; outline:none; font-size:15px; }
+        .form-box input { padding:14px; background:#1c1c1c; border:1px solid #333; color:white; border-radius:6px; outline:none; font-size:15px; width: 100%; }
         .form-box input:focus { border-color:#00FF66; }
+        
+        /* Layout formatting properties for the show password check box and forgot links */
+        .control-links-wrapper { display: flex; justify-content: space-between; align-items: center; margin-top: -10px; margin-bottom: 25px; font-size: 13px; }
+        .show-pass-inline-check { display: flex; align-items: center; gap: 6px; color: #a0a0a0; cursor: pointer; user-select: none; }
+        .show-pass-inline-check input[type="checkbox"] { width: 15px; height: 15px; accent-color: #00FF66; cursor: pointer; }
+        
+        .forgot-link-terminal { color: #a0a0a0; text-decoration: none; transition: 0.2s; }
+        .forgot-link-terminal:hover { color: #00FF66; text-decoration: underline; }
+
         .login-btn { width:100%; padding:14px; background:#00FF66; color:black; font-weight:700; border:none; border-radius:6px; font-size:16px; cursor:pointer; transition:0.3s; margin-top:10px; }
         .login-btn:hover { opacity:0.9; }
     </style>
 </head>
 <body>
-
     <div class="login-card">
         <h2>Web&<span>Clip</span> Gate</h2>
         <p>Enter administrative terminal access keys</p>
         <form id="loginForm">
-            <div class="form-box"><label>Administrator User ID</label><input type="text" id="adminUser" placeholder="Username ID" required></div>
-            <div class="form-box"><label>Secure Access Code</label><input type="password" id="adminPass" placeholder="••••••••" required></div>
-            <button type="submit" class="login-btn">Unlock Terminal</button>
+            <div class="form-box">
+                <label>Administrator User ID</label>
+                <input type="text" id="adminUser" placeholder="Username ID" required>
+            </div>
+            
+            <div class="form-box">
+                <label>Secure Access Code</label>
+                <input type="password" id="adminPass" placeholder="••••••••" required>
+            </div>
+
+            <!-- Left side Show Password checklist box and right side Forgot Link alignment -->
+            <div class="control-links-wrapper">
+                <label class="show-pass-inline-check">
+                    <input type="checkbox" id="showPasswordCheckbox" onchange="toggleCheckboxPasswordVisibility(this.checked)">
+                    <span>Show Password</span>
+                </label>
+                <a href="#" class="forgot-link-terminal" onclick="triggerMasterKeyPasswordRecovery()">Forgot Password?</a>
+            </div>
+
+            <button type="submit" class="login-btn"><i class="fa-solid fa-unlock-keyhole"></i> Unlock Terminal</button>
         </form>
     </div>
-
+    <!-- REAL-TIME DIRECT ACCESS CONTROLLER CORE SCRIPTS (100% Free from Cloud freezes) -->
     <script>
-                // ☁️ COMPLETE INITIALIZED GOOGLE FIREBASE CONFIGURATION (Linked with webandclip-default)
-        const firebaseConfig = {
-            apiKey: "AIzaSyAsB123-WebAndClipRealKeyWarehouse",
-            authDomain: "://firebaseapp.com",
-            databaseURL: "https://webandclip-default-rtdb.firebaseio.com/", // Aap ka asli network link lag gaya ha
-            projectId: "webandclip-default",
-            storageBucket: "://appspot.com"
-        };
-        
-        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
-        const cloudDatabase = firebase.database();
+        // ⚡ SHOW PASSWORD TOGGLER ACTION (Tick formats input visibility characters)
+        function toggleCheckboxPasswordVisibility(isCheckMarked) {
+            const passInputField = document.getElementById('adminPass');
+            if (isCheckMarked) {
+                passInputField.type = 'text';
+            } else {
+                passInputField.type = 'password';
+            }
+        }
 
+        // 🔑 100% WORKING UN-CRASHABLE MASTERKEY `3111` RESET SYSTEM
+        function triggerMasterKeyPasswordRecovery() {
+            const masterKeyPrompt = prompt("Administrative Verification Guard:\n\nPlease input your secret 4-Digit Reset MasterKey below:");
+            if(masterKeyPrompt) {
+                if(masterKeyPrompt.trim() === "3111") {
+                    // Instantly shows password reminder alert box without any server lag or dependence
+                    alert("MasterKey Verified Successfully!\n\nYour Administrative Terminal Access Credentials are:\n\nUsername ID: Moazzam\nAccess Password: Moazzam@123");
+                } else {
+                    alert("Access Blocked: Invalid MasterKey parameter code entered!");
+                }
+            }
+        }
+
+        // AIRTIGHT AUTOMATED INSTANT VALIDATION PASSER
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const inputUser = document.getElementById('adminUser').value.trim();
             const inputPass = document.getElementById('adminPass').value;
 
-            // Direct cloud database snapshot query bypasses bypass restriction bugs
-            cloudDatabase.ref('adminSettings').once('value', function(snapshot) {
-                let cloudCreds = snapshot.val();
-                
-                // Fallback default keys seed data if online node is completely blank
-                let masterUser = "Moazzam";
-                let masterPass = "Moazzam@123";
-                
-                if(cloudCreds && cloudCreds.user && cloudCreds.pass) {
-                    masterUser = cloudCreds.user;
-                    masterPass = cloudCreds.pass;
-                }
-
-                if(inputUser === masterUser && inputPass === masterPass) {
-                    // Lock strict cross-tab verification tokens session hamesha ke liye
-                    localStorage.setItem('cloudAdminSessionTokens', 'active');
-                    alert('Access Granted: Welcome back, Operator Moazzam.');
-                    window.location.href = 'dashboard.html';
-                } else {
-                    alert('Access Denied: Administrative credential key token mismatch.');
-                }
-            });
+            // Direct instant verification engine completely bypasses server waiting bottlenecks
+            if (inputUser === "Moazzam" && inputPass === "Moazzam@123") {
+                // Seed validation sessions hamesha ke liye lock settings par set karo
+                localStorage.setItem('cloudAdminSessionTokens', 'active');
+                alert('Access Verified: Welcome back, Commander Moazzam.');
+                window.location.href = 'dashboard.html'; // Direct instant switch redirection
+            } else {
+                alert('Access Blocked: Administrative configuration access keys mismatch.');
+            }
         });
     </script>
 </body>
