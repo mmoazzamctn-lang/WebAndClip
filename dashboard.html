@@ -180,7 +180,7 @@
         function triggerAutoLogout() { localStorage.removeItem('adminLogged'); alert('Security Inactivity Timeout: Inactive for 1 minute. Automatically logged out.'); window.location.href = 'login.html'; }
 
         // ☁️ INITIALIZE GOOGLE CLOUD FIREBASE LIVE INTEGRATION LOCK
-        const firebaseConfig = { databaseURL: "https://firebaseio.com" };
+        const firebaseConfig = { databaseURL: "https://webandclip-default-rtdb.firebaseio.com/" };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const cloudDatabase = firebase.database();
 
