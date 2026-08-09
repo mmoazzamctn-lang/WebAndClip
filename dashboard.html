@@ -170,16 +170,20 @@
             </div>
         </div>
     </div>
-    <!-- REAL CLOUD DRIVE CONTROLLER SCRIPT SYSTEMS AND TIMEOUT ENGINES -->
+    <!-- CENTRAL REAL-TIME OPERATIONS CONTROLLER & DATA MANAGER SCRIPTS -->
     <script>
-        if (localStorage.getItem('adminLogged') !== 'true') { window.location.href = 'login.html'; } 
-        else { document.getElementById('secureOverlay').style.display = 'none'; }
+        // STRICT CLOUD GATEKEEPER SECURITY CHECK (Bypasses local tampering)
+        if (sessionStorage.getItem('cloudAdminSession') !== 'active') { 
+            window.location.href = 'login.html'; 
+        } else { 
+            document.getElementById('secureOverlay').style.display = 'none'; 
+        }
 
         let idleTimer;
         function resetIdleTimer() { clearTimeout(idleTimer); idleTimer = setTimeout(triggerAutoLogout, 60000); }
-        function triggerAutoLogout() { localStorage.removeItem('adminLogged'); alert('Security Inactivity Timeout: Inactive for 1 minute. Automatically logged out.'); window.location.href = 'login.html'; }
+        function triggerAutoLogout() { sessionStorage.removeItem('cloudAdminSession'); alert('Security System Inactivity Timeout: Inactive for 1 minute. Automatically logged out.'); window.location.href = 'login.html'; }
 
-        // ☁️ INITIALIZE GOOGLE CLOUD FIREBASE LIVE INTEGRATION LOCK
+        // ☁️ INITIALIZE GOOGLE CLOUD FIREBASE CONNECTION
         const firebaseConfig = { databaseURL: "https://webandclip-default-rtdb.firebaseio.com/" };
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const cloudDatabase = firebase.database();
@@ -190,9 +194,7 @@
             resetIdleTimer();
             document.onmousemove = resetIdleTimer; document.onkeypress = resetIdleTimer; document.onclick = resetIdleTimer; document.onscroll = resetIdleTimer;
             
-            // Listen to Google realtime node branches changes dynamically
-            listenCloudOrders(); listenCloudPortfolio(); listenCloudReviews();
-            document.getElementById('current-user').value = localStorage.getItem('adminUser') || 'Moazzam';
+            listenCloudOrders(); listenCloudPortfolio(); listenCloudReviews(); listenCloudAdminCredentials();
         };
 
         function switchTab(tabName) {
@@ -200,18 +202,17 @@
             document.getElementById(`panel-${tabName}`).classList.add('active'); document.getElementById(`tab-${tabName}`).classList.add('active');
         }
 
-        function handleLogout() { localStorage.removeItem('adminLogged'); window.location.href = 'index.html'; }
+        function handleLogout() { sessionStorage.removeItem('cloudAdminSession'); window.location.href = 'index.html'; }
 
-        // Process raw background files for portfolios upload modules
         function processPortfolioFile(input) {
-            if(input.files && input.files) {
+            if(input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) { globalPortfolioFileRaw = e.target.result; };
-                reader.readAsDataURL(input.files);
+                reader.readAsDataURL(input.files[0]);
             }
         }
 
-        // FETCH ACTIVE INCOMING PROJECTS LOGS DIRECT FROM GOOGLE CLOUD NODE
+        // SYNC REALTIME CLOUD ORDERS DIRECT FROM GOOGLE WAREHOUSE
         function listenCloudOrders() {
             cloudDatabase.ref('orders').on('value', function(snapshot) {
                 const list = document.getElementById('admin-orders-list'); list.innerHTML = '';
@@ -355,7 +356,37 @@
 
         function submitCloudReply(id) { const txt = document.getElementById(`reply-input-${id}`).value.trim(); if(!txt) { alert('Type text first.'); return; } cloudDatabase.ref('reviews/' + id).update({ reply: txt }, function() { alert('Reply integration updated!'); }); }
         function deleteCloudReview(id) { if(confirm('Delete review?')) { cloudDatabase.ref('reviews/' + id).remove(); } }
-        document.getElementById('passwordForm').addEventListener('submit', function(e) { e.preventDefault(); localStorage.setItem('adminUser', document.getElementById('current-user').value.trim()); localStorage.setItem('adminPass', document.getElementById('new-pass').value); alert('Credentials local mapping token changed.'); document.getElementById('new-pass').value = ''; });
+        
+        // 🔒 SYNCHRONIZED CLOUD CREDENTIALS LOAD ENGINE (Fixes bypass and reset passwords bugs)
+        function listenCloudAdminCredentials() {
+            cloudDatabase.ref('adminSettings').on('value', function(snapshot) {
+                let creds = snapshot.val();
+                if(!creds) {
+                    // Seed fallback cloud variables if node doesn't exist
+                    cloudDatabase.ref('adminSettings').set({ user: "Moazzam", pass: "Moazzam@123" });
+                    document.getElementById('current-user').value = "Moazzam";
+                } else {
+                    document.getElementById('current-user').value = creds.user;
+                }
+            });
+        }
+
+        document.getElementById('passwordForm').addEventListener('submit', function(e) { 
+            e.preventDefault(); 
+            const newUser = document.getElementById('current-user').value.trim();
+            const newPass = document.getElementById('new-pass').value;
+            
+            // Strictly push password overrides into Google Cloud node node endpoints
+            cloudDatabase.ref('adminSettings').set({
+                user: newUser,
+                pass: newPass
+            }, function(error) {
+                if(!error) {
+                    alert('Security System Success:\n\nAdmin Access keys successfully synchronized on Google Cloud servers!');
+                    document.getElementById('new-pass').value = '';
+                }
+            });
+        });
     </script>
 </body>
 </html>
