@@ -4,8 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebAndClip | Elite Visual & Code Studio</title>
+    <!-- Google Cloud Firebase Realtime Database SDK Framework Core Libraries Links -->
+    <script src="https://gstatic.com"></script>
+    <script src="https://gstatic.com"></script>
     <style>
-        /* BASE PLATFORM RESET & BRAND THEME CONSTANTS */
+        /* BASE PLATFORM GENERAL RESET & VARIABLES COLOR MATRIX */
         * {
             margin: 0;
             padding: 0;
@@ -16,20 +19,24 @@
         :root {
             --bg-color: #000000;
             --card-bg: #111111;
-            --accent-color: #00FF66; /* Neon Green Core */
+            --accent-color: #00FF66; /* Neon Green Theme */
             --text-main: #FFFFFF;
             --text-muted: #A0A0A0;
             --star-color: #FFD700; /* Golden Star Grid */
             --error-color: #FF3333;
-            --footer-bg: #141414; /* Dark Charcoal Gray */
+            --footer-bg: #141414; /* Dark Charcoal Gray Visible Background */
         }
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
             overflow-x: hidden;
         }
-
-        /* TEXT-BASED STICKY HEADER ACTIONS */
+    </style>
+</head>
+<body>
+    <!-- STICKY HEADER AND RESPONSIVE SIDEBAR MOBILE MENU ENGINE CSS -->
+    <style>
+        /* COMPUTER VIEW STICKY HEADER LAYOUT */
         header {
             position: sticky;
             top: 0;
@@ -63,62 +70,239 @@
             margin-top: 5px;
             font-weight: 500;
         }
-        nav { display: flex; gap: 30px; align-items: center; }
-        nav a {
+        
+        /* DESKTOP WINDOW MENU DISPLAY LINKS */
+        nav.desktop-menu { display: flex; gap: 30px; align-items: center; }
+        nav.desktop-menu a {
             color: var(--text-main);
             text-decoration: none;
             font-weight: 500;
             font-size: 16px;
             transition: 0.3s;
         }
-        nav a:hover { color: var(--accent-color); }
+        nav.desktop-menu a:hover { color: var(--accent-color); }
+
+        /* DYNAMIC MOBILE HAMBURGER ICON (3 LINES DESIGN) */
+        .hamburger-toggle-icon {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            z-index: 2000;
+            background: transparent;
+            border: none;
+            outline: none;
+        }
+        .hamburger-toggle-icon span {
+            display: block;
+            width: 28px;
+            height: 3px;
+            background-color: var(--text-main);
+            border-radius: 2px;
+            transition: 0.4s;
+        }
+        /* Hover properties for hamburger trigger lines links code */
+        .hamburger-toggle-icon:hover span { background-color: var(--accent-color); }
+
+        /* RIGHT SLIDE-IN SIDE MENU DRAWER PANEL FOR MOBILE DEVICES */
+        .mobile-side-drawer {
+            position: fixed;
+            top: 0;
+            right: -300px; /* Hidden initially offscreen */
+            width: 280px;
+            height: 100vh;
+            background: #0d0d0d;
+            border-left: 2px solid #222;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.8);
+            z-index: 1500;
+            display: flex;
+            flex-direction: column;
+            padding: 80px 30px 40px 30px;
+            gap: 25px;
+            transition: 0.4s cubic-bezier(0.1, 1, 0.1, 1);
+        }
+        .mobile-side-drawer.open-drawer { right: 0; } /* Activated open slide-in panel */
+        .mobile-side-drawer a {
+            color: #E0E0E0;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            border-bottom: 1px solid #1a1a1a;
+            padding-bottom: 12px;
+            transition: 0.2s;
+        }
+        .mobile-side-drawer a:hover { color: var(--accent-color); padding-left: 5px; }
+
+        /* Dark overlay filter behind menu drawer backdrop clicks dismiss handles */
+        .mobile-menu-backdrop-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            background: rgba(0,0,0,0.7);
+            z-index: 1400;
+            display: none;
+            opacity: 0;
+            transition: 0.3s ease;
+        }
+        .mobile-menu-backdrop-layer.show-backdrop { display: block; opacity: 1; }
+
+        /* RESPONSIVE CSS MEDIA QUERY TO TOGGLE VISIBILITY AUTOMATICALLY */
+        @media (max-width: 900px) {
+            nav.desktop-menu { display: none; } /* Hide wide menu logs */
+            .hamburger-toggle-icon { display: flex; } /* Reveal 3 lines toggle icon */
+        }
     </style>
-</head>
-<body>
-    <!-- HERO COMPONENT AND CUSTOM CAROUSEL LAYOUT STYLES -->
+    <!-- HERO SECTION AND SERVICES GRID COMPONENT LAYOUT STYLES -->
     <style>
-        /* HERO SECTION MAIN MATRIX WITH MULTI SLIDER INTERFACE */
-        .hero { display: flex; flex-wrap: wrap; align-items: center; padding: 80px 5%; gap: 40px; }
-        .hero-text { flex: 1; min-width: 300px; }
-        .hero-text h1 { font-size: 42px; line-height: 1.2; margin-bottom: 20px; }
-        .hero-text h1 span { color: var(--accent-color); }
-        .hero-text p { color: var(--text-muted); font-size: 18px; margin-bottom: 30px; line-height: 1.6; }
-        .hero-video { flex: 1; min-width: 300px; aspect-ratio: 16/9; background: #222; border-radius: 10px; overflow: hidden; border: 1px solid #333; }
+        /* HERO COMPONENT FLEX PLATFORM CONTAINER GRID */
+        .hero { 
+            display: flex; 
+            flex-wrap: wrap; 
+            align-items: center; 
+            padding: 80px 5%; 
+            gap: 40px; 
+        }
+        .hero-text { 
+            flex: 1; 
+            min-width: 300px; 
+        }
+        .hero-text h1 { 
+            font-size: 42px; 
+            line-height: 1.2; 
+            margin-bottom: 20px; 
+        }
+        .hero-text h1 span { 
+            color: var(--accent-color); 
+        }
+        .hero-text p { 
+            color: var(--text-muted); 
+            font-size: 18px; 
+            margin-bottom: 30px; 
+            line-height: 1.6; 
+        }
+        .hero-video { 
+            flex: 1; 
+            min-width: 300px; 
+            aspect-ratio: 16/9; 
+            background: #222; 
+            border-radius: 10px; 
+            overflow: hidden; 
+            border: 1px solid #333; 
+        }
         
-        /* DYNAMIC SHOWREEL CAROUSEL GRID ELEMENTS */
-        .slider-container-box { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-        .hero-slide { display: none; width: 100%; height: 100%; border: none; }
-        .hero-slide.active { display: block; }
-        .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,255,102,0.2); border: 1px solid var(--accent-color); color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: bold; transition: 0.3s; z-index: 10; font-size: 18px; user-select: none; }
-        .slider-btn:hover { background: var(--accent-color); color: black; }
+        /* MULTI-VIDEO DYNAMIC SHOWREEL BANNER CAROUSEL SYSTEM */
+        .slider-container-box { 
+            position: relative; 
+            width: 100%; 
+            height: 100%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        .hero-slide { 
+            display: none; 
+            width: 100%; 
+            height: 100%; 
+            border: none; 
+        }
+        .hero-slide.active { 
+            display: block; 
+        }
+        
+        /* Native manual raw file video element formatting standard configuration */
+        video.hero-slide {
+            object-fit: cover;
+            background: #000;
+        }
+
+        /* Responsive Navigation Sliders Trigger Button Arrows Grid layout */
+        .slider-btn { 
+            position: absolute; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            background: rgba(0, 255, 102, 0.2); 
+            border: 1px solid var(--accent-color); 
+            color: white; 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+            transition: 0.3s; 
+            z-index: 10; 
+            font-size: 18px; 
+            user-select: none; 
+        }
+        .slider-btn:hover { 
+            background: var(--accent-color); 
+            color: black; 
+        }
         .slider-btn-prev { left: 15px; }
         .slider-btn-next { right: 15px; }
 
-        /* ELITE SERVICES COMPONENT BOXES */
-        .services { padding: 60px 5%; text-align: center; }
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .service-card { background: var(--card-bg); padding: 40px 30px; border-radius: 10px; border: 1px solid #222; transition: 0.3s; }
-        .service-card:hover { transform: translateY(-8px); border-color: var(--accent-color); box-shadow: 0 10px 20px rgba(0, 255, 102, 0.1); }
-        .service-card svg { width: 40px; height: 40px; fill: var(--accent-color); margin-bottom: 20px; }
-        .service-card h3 { margin-bottom: 15px; font-size: 22px; }
-        .service-card p { color: var(--text-muted); line-height: 1.5; }
+        /* ELITE AGENCY SERVICES GRID LAYOUT SPECIFICATIONS */
+        .services { 
+            padding: 60px 5%; 
+            text-align: center; 
+        }
+        .section-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 40px;
+        }
+        .section-title span { color: var(--accent-color); }
+        .services-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; 
+        }
+        .service-card { 
+            background: var(--card-bg); 
+            padding: 40px 30px; 
+            border-radius: 10px; 
+            border: 1px solid #222; 
+            transition: 0.3s; 
+        }
+        .service-card:hover { 
+            transform: translateY(-8px); 
+            border-color: var(--accent-color); 
+            box-shadow: 0 10px 20px rgba(0, 255, 102, 0.1); 
+        }
+        .service-card svg { 
+            width: 40px; 
+            height: 40px; 
+            fill: var(--accent-color); 
+            margin-bottom: 20px; 
+        }
+        .service-card h3 { 
+            margin-bottom: 15px; 
+            font-size: 22px; 
+        }
+        .service-card p { 
+            color: var(--text-muted); 
+            line-height: 1.5; 
+        }
     </style>
-    <!-- CUSTOM DATA REVIEWS WINDOW & ADVANCED FILE INPUT FIELD STYLES -->
+    <!-- DYNAMIC PORTFOLIO WORK GRID AND BOOKING INTERFACES DESIGN LAYER CSS -->
     <style>
-        /* PORTFOLIO SHOWCASE GALLERY SCREEN */
+        /* RECENT PORTFOLIO SHOWCASE SCREEN WORK ENGINE */
         .portfolio { padding: 60px 5%; text-align: center; }
         .filter-tabs { display: flex; justify-content: center; gap: 15px; margin-bottom: 30px; }
         .tab-btn { background: #222; border: none; color: white; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: 600; transition: 0.3s; }
         .tab-btn.active, .tab-btn:hover { background: var(--accent-color); color: black; }
         .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 25px; }
-        .portfolio-item { background: var(--card-bg); border-radius: 10px; overflow: hidden; border: 1px solid #222; }
+        .portfolio-item { background: var(--card-bg); border-radius: 10px; overflow: hidden; border: 1px solid #222; transition: 0.3s; }
+        .portfolio-item:hover { transform: scale(1.02); border-color: var(--accent-color); }
         .portfolio-item iframe { width: 100%; aspect-ratio: 16/9; border: none; display: block; }
+        .portfolio-item video { width: 100%; aspect-ratio: 16/9; background: #000; object-fit: cover; display: block; }
         .portfolio-item img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
         .portfolio-info { padding: 15px; text-align: left; }
-        .portfolio-info h4 { font-size: 18px; margin-bottom: 5px; }
+        .portfolio-info h4 { font-size: 18px; margin-bottom: 5px; display: flex; align-items: center; justify-content: space-between; }
         .portfolio-info p { color: var(--accent-color); font-size: 14px; }
 
-        /* FORM GATEWAYS MANAGEMENT SECTIONS */
+        /* MULTI REGISTRY INPUT CONTEXT LAYOUT GRID PLATFORMS */
         .work-portal-section { padding: 60px 5%; background: #050505; display: flex; flex-wrap: wrap; gap: 40px; }
         .portal-box { flex: 1; min-width: 320px; background: var(--card-bg); padding: 35px; border-radius: 12px; border: 1px solid #222; }
         .portal-box h3 { margin-bottom: 20px; font-size: 24px; border-bottom: 1px solid #222; padding-bottom: 10px; }
@@ -134,64 +318,183 @@
         .file-upload-wrapper input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
         .file-upload-text { color: var(--text-muted); font-size: 14px; }
         .file-upload-text svg { width: 28px; height: 28px; fill: var(--accent-color); margin-bottom: 8px; display: inline-block; }
-        
-        /* Conditional Fields Visibility Layer */
-        .dynamic-contact-field { display: none; }
-        .dynamic-contact-field.active { display: block; }
     </style>
     <!-- INTERACTIVE STAR BLOCKS & SECURE CHARCOAL TEXT GLOW FOOTER CSS -->
     <style>
-        /* INTERACTIVE RATING ENGINE CONTEXTS */
-        .star-rating-wrapper { display: flex; gap: 10px; margin: 10px 0; }
-        .star-rating-wrapper svg { width: 30px; height: 30px; fill: #333; cursor: pointer; transition: 0.2s; }
-        .star-rating-wrapper svg.active, .star-rating-wrapper svg:hover { fill: var(--star-color); }
+        /* INTERACTIVE BLANK RATING STAR DESIGN ENGINE CONTEXTS */
+        .star-rating-wrapper { 
+            display: flex; 
+            gap: 10px; 
+            margin: 10px 0; 
+        }
+        .star-rating-wrapper svg { 
+            width: 30px; 
+            height: 30px; 
+            fill: #333; /* Completely blank initial gray layout */
+            cursor: pointer; 
+            transition: 0.2s; 
+        }
+        .star-rating-wrapper svg.active, .star-rating-wrapper svg:hover { 
+            fill: var(--star-color); 
+        }
         
-        .reviews-display-column { display: flex; flex-direction: column; gap: 20px; max-height: 500px; overflow-y: auto; padding-right: 10px; margin-top: 25px; }
-        .review-card { background: #181818; padding: 20px; border-radius: 8px; border-left: 4px solid var(--accent-color); }
-        .review-card h5 { font-size: 16px; color: var(--accent-color); margin-bottom: 5px; }
-        .review-stars svg { width: 14px; height: 14px; fill: var(--star-color); margin-right: 2px; }
-        .admin-reply { background: #111; padding: 12px; border-radius: 6px; margin-top: 12px; font-size: 13px; border-left: 2px solid var(--text-muted); }
+        .reviews-display-column { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 20px; 
+            max-height: 500px; 
+            overflow-y: auto; 
+            padding-right: 10px; 
+            margin-top: 25px; 
+        }
+        .review-card { 
+            background: #181818; 
+            padding: 20px; 
+            border-radius: 8px; 
+            border-left: 4px solid var(--accent-color); 
+        }
+        .review-card h5 { 
+            font-size: 16px; 
+            color: var(--accent-color); 
+            margin-bottom: 5px; 
+        }
+        .review-stars svg { 
+            width: 14px; 
+            height: 14px; 
+            fill: var(--star-color); 
+            margin-right: 2px; 
+        }
+        .admin-reply { 
+            background: #111; 
+            padding: 12px; 
+            border-radius: 6px; 
+            margin-top: 12px; 
+            font-size: 13px; 
+            border-left: 2px solid var(--text-muted); 
+        }
 
-        /* HIGHLY VISIBLE CHARCOAL AGENCY FOOTER FRAMEWORK */
-        footer { background: var(--footer-bg); padding: 70px 5% 40px 5%; border-top: 2px solid #222; }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 40px; }
-        .footer-col h4 { font-size: 20px; margin-bottom: 25px; color: var(--accent-color); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-        .footer-col p, .footer-col a { color: #E0E0E0; text-decoration: none; font-size: 15px; line-height: 1.8; display: block; margin-bottom: 10px; }
-        .footer-col a:hover { color: var(--accent-color); text-indent: 3px; transition: 0.2s; }
-        .footer-bottom { text-align: center; color: #777; font-size: 14px; border-top: 1px solid #2a2a2a; padding-top: 30px; margin-top: 20px; }
+        /* DYNAMIC CHARCOAL HIGHLY VISIBLE COMMERCIAL FOOTER */
+        footer { 
+            background: var(--footer-bg); 
+            padding: 70px 5% 40px 5%; 
+            border-top: 2px solid #222; 
+        }
+        .footer-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+            gap: 40px; 
+            margin-bottom: 40px; 
+        }
+        .footer-col h4 { 
+            font-size: 20px; 
+            margin-bottom: 25px; 
+            color: var(--accent-color); 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+        }
+        .footer-col p, .footer-col a { 
+            color: #E0E0E0; 
+            text-decoration: none; 
+            font-size: 15px; 
+            line-height: 1.8; 
+            display: block; 
+            margin-bottom: 10px; 
+        }
+        .footer-col a:hover { 
+            color: var(--accent-color); 
+            text-indent: 3px; 
+            transition: 0.2s; 
+        }
+        .footer-bottom { 
+            text-align: center; 
+            color: #777; 
+            font-size: 14px; 
+            border-top: 1px solid #2a2a2a; 
+            padding-top: 30px; 
+            margin-top: 20px; 
+        }
 
-        /* WHATSAPP RECTANGLE ROUNDED CONTEXT COMPONENT BUTTON */
-        .whatsapp-floating-box { position: fixed; bottom: 25px; right: 25px; z-index: 9999; }
-        .whatsapp-merged-btn { background: #25D366; color: white; padding: 12px 24px; border-radius: 35px; display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 14px; text-decoration: none; box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4); transition: 0.3s; user-select: none; }
-        .whatsapp-merged-btn svg { width: 24px; height: 24px; fill: white; }
-        .whatsapp-merged-btn:hover { transform: scale(1.06); background: #20ba5a; }
+        /* INTEGRATED RECTANGLE ROUNDED FLOATING BADGE BUTTON */
+        .whatsapp-floating-box { 
+            position: fixed; 
+            bottom: 25px; 
+            right: 25px; 
+            z-index: 9999; 
+        }
+        .whatsapp-merged-btn { 
+            background: #25D366; 
+            color: white; 
+            padding: 12px 24px; 
+            border-radius: 35px; 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            font-weight: 700; 
+            font-size: 14px; 
+            text-decoration: none; 
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4); 
+            transition: 0.3s; 
+            user-select: none; 
+        }
+        .whatsapp-merged-btn svg { 
+            width: 24px; 
+            height: 24px; 
+            fill: white; 
+        }
+        .whatsapp-merged-btn:hover { 
+            transform: scale(1.06); 
+            background: #20ba5a; 
+        }
     </style>
 </head>
 <body>
-    <!-- EXECUTIVE RESPONSIVE TOP LINKS NAV BAR & DYNAMIC VIDEO CAROUSEL -->
+
+    <!-- INTERACTIVE RESPONSIVE NAVIGATION STRUCTURE FRAMEWORK -->
     <header>
         <a href="#" class="logo-container">
             <div class="logo-main-text">Web&<span>Clip</span></div>
             <div class="logo-tagline">Web Designing & Video Editing</div>
         </a>
-        <nav>
+        
+        <!-- Standard wide display links layout panel -->
+        <nav class="desktop-menu">
             <a href="#">Home</a>
             <a href="#services">Our Services</a>
             <a href="#portfolio">Our Work</a>
             <a href="#portal">Book Order</a>
             <a href="#contact-info">Contact Us</a>
         </nav>
+
+        <!-- Dynamic Mobile Menu Trigger Bar (3 Lines Hamburger Button) -->
+        <button class="hamburger-toggle-icon" id="menuTriggerBtn" onclick="toggleMobileMenuDrawer()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
     </header>
 
+    <!-- SLIDE-IN SIDE PANEL VIEW DESIGN FOR MOBILE PHONES -->
+    <nav class="mobile-side-drawer" id="mobileDrawerMenu">
+        <a href="#" onclick="toggleMobileMenuDrawer()">Home Dashboard</a>
+        <a href="#services" onclick="toggleMobileMenuDrawer()">Our Services</a>
+        <a href="#portfolio" onclick="toggleMobileMenuDrawer()">Our Work</a>
+        <a href="#portal" onclick="toggleMobileMenuDrawer()">Book Order Panel</a>
+        <a href="#contact-info" onclick="toggleMobileMenuDrawer()">Contact Studio</a>
+    </nav>
+    <div class="mobile-menu-backdrop-layer" id="drawerBackdropFilter" onclick="toggleMobileMenuDrawer()"></div>
+
+    <!-- MAIN DISPLAY WINDOW INTERFACE MATRIX -->
     <section class="hero">
         <div class="hero-text">
             <h1>We Craft High-Converting <span>Websites</span> & Premium <span>Videos</span></h1>
             <p>Hi, I am Moazzam. I help brands grow with professional video editing and modern web design solutions.</p>
         </div>
         
-        <!-- HIGH-END MULTI VIDEO SLIDER PORT DISPLAY CAROUSEL VIEW -->
+        <!-- HIGH-END AUTOMATIC DYNAMIC OVERLAY VIDEO CONTAINER WINDOW -->
         <div class="hero-video" id="hero-slider-viewport">
             <div class="slider-container-box" id="sliderWrapper">
+                <!-- JavaScript handles multi link sliders array storage sync frames -->
                 <iframe id="hero-iframe" src="https://youtube.com" allowfullscreen class="hero-slide active"></iframe>
             </div>
         </div>
@@ -214,7 +517,7 @@
             </div>
         </div>
     </section>
-        <section class="portfolio" id="portfolio">
+    <section class="portfolio" id="portfolio">
         <h2 class="section-title">Our Recent <span>Work</span></h2>
         <div class="filter-tabs">
             <button class="tab-btn active" onclick="filterPortfolio('all')">All</button>
@@ -246,7 +549,7 @@
                     </select>
                 </div>
 
-                <!-- 1. DYNAMIC SECTION: FIXED WHATSAPP GRID WITH ALL COUNTRIES CODES (100% Guaranteed Open list) -->
+                <!-- 1. DYNAMIC SECTION: FIXED WHATSAPP GRID WITH ALL COUNTRIES CODES -->
                 <div class="form-group dynamic-contact-field active" id="fieldWrapper-WhatsApp">
                     <label>Your WhatsApp Number (No Direct Calling Digits Allowed)</label>
                     <div style="display: grid; grid-template-columns: 180px 1fr; gap: 10px;">
@@ -288,7 +591,6 @@
                     <label>Skype Live Account Handle ID</label>
                     <input type="text" id="orderSkypeId" placeholder="e.g., live:moazzam_clip_studio">
                 </div>
-
                 <div class="form-group"><label>Email Address</label><input type="email" id="orderEmail" placeholder="Enter real email (e.g., name@gmail.com)" required></div>
                 
                 <div class="form-group">
@@ -303,7 +605,7 @@
                 
                 <div class="form-group"><label>Proposed Project Budget (Minimum $50 USD Required)</label><input type="number" id="orderBudget" min="50" placeholder="Minimum 50" required></div>
                 
-                <!-- Updated Secure Multi-Format File Input Trigger Box Component -->
+                <!-- Secure Multi-Format File Input Trigger Box Component -->
                 <div class="form-group">
                     <label>Payment Proof Reference (Upload Screenshot Image or PDF Slip File)</label>
                     <div class="file-upload-wrapper">
@@ -320,7 +622,7 @@
             </form>
         </div>
 
-                <div class="portal-box">
+        <div class="portal-box">
             <h3>Client Feedback Evaluation</h3>
             <form id="reviewForm">
                 <div class="form-group"><label>Your Name</label><input type="text" id="revName" placeholder="Enter your name" required></div>
@@ -359,39 +661,39 @@
                 <p style="font-weight:600;color:white;margin-top:10px;">Studio Base:</p><p>Islamabad, Pakistan</p>
             </div>
         </div>
-        <div class="footer-bottom"><p>&copy; 2026 WebAndClip. All Rights Reserved. Conceptualized & Developed by Mr. Moazzam.</p></div>
+        <div class="footer-bottom"><p>&copy; 2026 WebAndClip. All Rights Reserved. Conceptualized & Developed by Moazzam.</p></div>
     </footer>
-    <!-- FLOATING WHATSAPP BUTTON COMPONENT INLINE -->
-    <div class="whatsapp-floating-box"><a href="https://wa.me" target="_blank" class="whatsapp-merged-btn"><svg viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-117zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg><span>Chat on WhatsApp</span></a></div>
 
-    <!-- HIGH-CAPACITY SECURE STORAGE SCRIPT GATEWAY BLOCK -->
+    <!-- FLOATING WHATSAPP BUTTON COMPONENT INLINE -->
+    <div class="whatsapp-floating-box"><a href="https://wa.me/923003521238" target="_blank" class="whatsapp-merged-btn"><svg viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-117zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg><span>Chat on WhatsApp</span></a></div>
+    <!-- CENTRAL CORE ENGINE SCRIPTS MATRIX & GOOGLE CLOUD INITIALIZER -->
     <script>
         let currentSelectedRating = 0;
-        let globalReceiptFileBlob = null; // Storing actual high-res raw file chunk instead of string
+        let globalReceiptFileBlob = null;
         let globalReceiptFileType = "";
 
         const solidStar = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:var(--star-color);margin-right:2px;"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>`;
-        const emptyStar = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:#444;margin-right:2px;"><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/> </svg>`;
+        const emptyStar = `<svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:#444;margin-right:2px;"><path d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></svg>`;
 
-        // INITIALIZE ULTRA HIGH CAPACITY DATABASE (Bypasses local storage limits completely)
-        let dbEngine;
-        const requestDB = indexedDB.open("StudioReceiptsWarehouse", 1);
-        requestDB.onupgradeneeded = function(e) {
-            let db = e.target.result;
-            if(!db.objectStoreNames.contains("slipsStore")) {
-                db.createObjectStore("slipsStore", { keyPath: "orderId" });
-            }
+        // ☁️ SECURE GOOGLE CLOUD FIREBASE CENTRAL DATA LAYER CONFIGURATION
+        const firebaseConfig = {
+            databaseURL: "https://firebaseio.com" // Google Realtime Cloud Database Link
         };
-        requestDB.onsuccess = function(e) { dbEngine = e.target.result; };
-        requestDB.onerror = function() { console.error("Database storage linkage error log."); };
+        // Initialize Google cloud engine parameters
+        if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
+        const cloudDatabase = firebase.database();
 
-        function saveSlipToWarehouse(orderId, blobData, mimeType, callbackDone) {
-            let transaction = dbEngine.transaction(["slipsStore"], "readwrite");
-            let warehouse = transaction.objectStore("slipsStore");
-            warehouse.put({ orderId: String(orderId), rawBlob: blobData, type: mimeType });
-            transaction.oncomplete = function() { callbackDone(); };
+        // 📱 MOBILE HAMBURGER MENU DRAWER CONTROLLER ENGINE (3 Lines Trigger Function)
+        function toggleMobileMenuDrawer() {
+            const drawer = document.getElementById('mobileDrawerMenu');
+            const backdrop = document.getElementById('drawerBackdropFilter');
+            
+            // Toggle classes seamlessly using native element tokens
+            drawer.classList.toggle('open-drawer');
+            backdrop.classList.toggle('show-backdrop');
         }
-                // DYNAMIC CHANNEL CHANGER FUNCTION
+
+        // Dynamic select box toggler changes handles instantly
         function handleContactChannelSwitch(selectedMethod) {
             document.querySelectorAll('.dynamic-contact-field').forEach(field => {
                 field.classList.remove('active');
@@ -400,40 +702,67 @@
             if(targetedWrapper) { targetedWrapper.classList.add('active'); }
         }
 
-        // Processing high resolution assets flawlessly without size limitations
+        // Processing deep file binary arrays synchronously into database structures
         function processFileReceipt(input) {
             const container = document.getElementById('uploadLabelMessage');
             if(input.files && input.files[0]) {
                 const targetFile = input.files[0];
-                globalReceiptFileBlob = targetFile; // Extract raw binary array
                 globalReceiptFileType = targetFile.type;
-                container.innerText = "Slip Linked & Checked: " + targetFile.name;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    globalReceiptFileBlob = e.target.result; // Dynamic base64 text array compiled
+                    container.innerText = "Slip Checked & Processed: " + targetFile.name;
+                };
+                reader.readAsDataURL(targetFile);
             }
         }
 
         let activeSlideIndex = 0;
         function loadHeroBannersSlider() {
             const wrapper = document.getElementById('sliderWrapper');
-            let savedBanners = JSON.parse(localStorage.getItem('studioBanners')) || ["https://youtube.com"];
-            wrapper.innerHTML = '';
-            
-            savedBanners.forEach((link, idx) => {
-                let srcLink = link; if(srcLink.includes('watch?v=')) srcLink = srcLink.replace('watch?v=', 'embed/');
-                const frame = document.createElement('iframe'); frame.src = srcLink; frame.className = idx === 0 ? 'hero-slide active' : 'hero-slide'; frame.setAttribute('allowfullscreen', 'true'); wrapper.appendChild(frame);
-            });
+            // Fetch live synchronized banner slider links from cloud node registry
+            cloudDatabase.ref('studioBanners').on('value', function(snapshot) {
+                let savedBanners = snapshot.val();
+                if(!savedBanners || Object.keys(savedBanners).length === 0) {
+                    savedBanners = ["https://youtube.com"];
+                } else {
+                    savedBanners = Object.values(savedBanners);
+                }
+                wrapper.innerHTML = '';
+                
+                savedBanners.forEach((link, idx) => {
+                    let srcLink = link;
+                    if(srcLink.includes('watch?v=')) srcLink = srcLink.replace('watch?v=', 'embed/');
+                    
+                    let frame;
+                    if(srcLink.match(/\.(mp4|webm|ogg)$/i) || srcLink.includes('data:video')) {
+                        frame = document.createElement('video');
+                        frame.src = srcLink; frame.autoplay = true; frame.loop = true; frame.muted = true;
+                    } else {
+                        frame = document.createElement('iframe');
+                        frame.src = srcLink; frame.setAttribute('allowfullscreen', 'true');
+                    }
+                    frame.className = idx === 0 ? 'hero-slide active' : 'hero-slide';
+                    wrapper.appendChild(frame);
+                });
 
-            if(savedBanners.length > 1) {
-                const prevBtn = document.createElement('button'); prevBtn.className = 'slider-btn slider-btn-prev'; prevBtn.innerHTML = '&#10094;'; prevBtn.onclick = () => shiftSlide(-1);
-                const nextBtn = document.createElement('button'); nextBtn.className = 'slider-btn slider-btn-next'; nextBtn.innerHTML = '&#10095;'; nextBtn.onclick = () => shiftSlide(1);
-                wrapper.appendChild(prevBtn); wrapper.appendChild(nextBtn);
-            }
+                if(savedBanners.length > 1) {
+                    const prevBtn = document.createElement('button'); prevBtn.className = 'slider-btn slider-btn-prev'; prevBtn.innerHTML = '&#10094;'; prevBtn.onclick = () => shiftSlide(-1);
+                    const nextBtn = document.createElement('button'); nextBtn.className = 'slider-btn slider-btn-next'; nextBtn.innerHTML = '&#10095;'; nextBtn.onclick = () => shiftSlide(1);
+                    wrapper.appendChild(prevBtn); wrapper.appendChild(nextBtn);
+                }
+            });
         }
 
         function shiftSlide(direction) {
-            const slides = document.querySelectorAll('.hero-slide'); slides[activeSlideIndex].classList.remove('active');
-            activeSlideIndex = (activeSlideIndex + direction + slides.length) % slides.length; slides[activeSlideIndex].classList.add('active');
+            const slides = document.querySelectorAll('.hero-slide');
+            if(slides.length === 0) return;
+            slides[activeSlideIndex].classList.remove('active');
+            activeSlideIndex = (activeSlideIndex + direction + slides.length) % slides.length;
+            slides[activeSlideIndex].classList.add('active');
         }
-        // COMPRESSED STRICT HIGH RESOLUTION SUBMISSION HOOK
+        // GOOGLE CLOUD ORDERS PUSHER & PORTFOLIO ENGINE RENDERER
         document.getElementById('orderForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const emailIn = document.getElementById('orderEmail').value.trim();
@@ -442,11 +771,11 @@
             const preferredMethod = document.getElementById('orderContactMethod').value;
             const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-            if(!document.getElementById('orderName').value.trim()) { alert('Please enter your name.'); return; }
-            if(!emailRegex.test(emailIn)) { alert('Validation Error: Provide real corporate email address.'); document.getElementById('orderEmail').focus(); return; }
-            if(!serviceIn) { alert('Validation Error: Select service category track.'); return; }
-            if(isNaN(budgetIn) || budgetIn < 50) { alert('Budget Error: Minimum required tier is $50 USD.'); return; }
-            if(!globalReceiptFileBlob) { alert('File Error: Payment reference proof slip is mandatory.'); return; }
+            if(!document.getElementById('orderName').value.trim()) { alert('Please enter your full name.'); return; }
+            if(!emailRegex.test(emailIn)) { alert('Validation Error: Provide valid email template.'); document.getElementById('orderEmail').focus(); return; }
+            if(!serviceIn) { alert('Validation Error: Choose a service track.'); return; }
+            if(isNaN(budgetIn) || budgetIn < 50) { alert('Budget Block: Minimum baseline value is $50 USD.'); return; }
+            if(!globalReceiptFileBlob) { alert('File Missing: Upload valid receipt slip (PNG, JPG, PDF).'); return; }
 
             let combinedFinalContactHandle = "";
             if (preferredMethod === "WhatsApp") {
@@ -464,93 +793,101 @@
 
             const currentGeneratedOrderId = String(Date.now());
 
-            saveSlipToWarehouse(currentGeneratedOrderId, globalReceiptFileBlob, globalReceiptFileType, function() {
-                let orders = JSON.parse(localStorage.getItem('orders')) || [];
-                orders.push({ 
-                    id: currentGeneratedOrderId, 
-                    name: document.getElementById('orderName').value, 
-                    phone: combinedFinalContactHandle, 
-                    contactApp: preferredMethod, 
-                    email: emailIn, 
-                    service: serviceIn, 
-                    budget: "$" + budgetIn, 
-                    receiptType: globalReceiptFileType, 
-                    details: document.getElementById('orderDetails').value 
-                });
-                localStorage.setItem('orders', JSON.stringify(orders));
-                
-                document.getElementById('orderForm').reset();
-                globalReceiptFileBlob = null;
-                document.getElementById('uploadLabelMessage').innerText = "Click to Browse Payment Receipt (JPG, PNG, PDF)";
-                handleContactChannelSwitch("WhatsApp");
-                alert('Order Placed Successfully! Moazzam will verify your payment slip in warehouse and contact you shortly.');
+            // Directly pushing multi format assets into Google Cloud Realtime node warehouse
+            cloudDatabase.ref('orders/' + currentGeneratedOrderId).set({
+                id: currentGeneratedOrderId,
+                name: document.getElementById('orderName').value,
+                phone: combinedFinalContactHandle,
+                contactApp: preferredMethod,
+                email: emailIn,
+                service: serviceIn,
+                budget: "$" + budgetIn,
+                receipt: globalReceiptFileBlob, // Permanent Uncrashable Storage Data
+                details: document.getElementById('orderDetails').value,
+                status: "Pending"
+            }, function(error) {
+                if(error) { alert('Cloud network communication sync timeout error.'); } 
+                else {
+                    document.getElementById('orderForm').reset(); globalReceiptFileBlob = null;
+                    document.getElementById('uploadLabelMessage').innerText = "Click to Browse Payment Receipt (JPG, PNG, PDF)";
+                    handleContactChannelSwitch("WhatsApp");
+                    alert('Order Placed Successfully!\n\nMoazzam will verify your payment slip inside Google Cloud Warehouse and contact you shortly.');
+                }
             });
         });
+
+        function setRating(val) {
+            currentSelectedRating = val;
+            const stars = document.getElementById('starContainer').getElementsByTagName('svg');
+            for (let i = 0; i < 5; i++) {
+                if (i < val) { stars[i].style.fill = 'var(--star-color)'; } 
+                else { stars[i].style.fill = '#333'; }
+            }
+        }
 
         document.getElementById('reviewForm').addEventListener('submit', function(e) {
             e.preventDefault(); if(currentSelectedRating === 0){ alert('Select star ratings first.'); return; }
-            let reviews = JSON.parse(localStorage.getItem('reviews')) || [];
-            reviews.push({ id: Date.now(), name: document.getElementById('revName').value, rating: currentSelectedRating, message: document.getElementById('revMessage').value, reply: '' });
-            localStorage.setItem('reviews', JSON.stringify(reviews)); this.reset(); setRating(0); loadReviews();
-            alert('Review submitted for Admin evaluation.');
+            const reviewId = String(Date.now());
+            cloudDatabase.ref('reviews/' + reviewId).set({
+                id: reviewId, name: document.getElementById('revName').value, rating: currentSelectedRating, message: document.getElementById('revMessage').value, reply: ''
+            }, function(error) {
+                if(!error) { document.getElementById('reviewForm').reset(); setRating(0); alert('Review submitted for Admin cloud evaluation.'); }
+            });
         });
 
         function loadReviews() {
-            const display = document.getElementById('reviews-display'); let reviews = JSON.parse(localStorage.getItem('reviews')) || []; display.innerHTML = '';
-            if(reviews.length === 0) { display.innerHTML = '<p style="color:var(--text-muted)">No feedback records found.</p>'; return; }
-            reviews.forEach(rev => {
-                const card = document.createElement('div'); card.className = 'review-card';
-                let starHTML = ''; for(let i=1; i<=5; i++) { starHTML += i <= rev.rating ? solidStar : emptyStar; }
-                let replyHTML = rev.reply ? `<div class="admin-reply"><strong>Moazzam:</strong> ${rev.reply}</div>` : '';
-                card.innerHTML = `<h5>${rev.name}</h5><div class="review-stars">${starHTML}</div><p>"${rev.message}"</p>${replyHTML}`; display.appendChild(card);
+            cloudDatabase.ref('reviews').on('value', function(snapshot) {
+                const display = document.getElementById('reviews-display'); display.innerHTML = '';
+                let reviews = snapshot.val();
+                if(!reviews) { display.innerHTML = '<p style="color:var(--text-muted)">No feedback records found.</p>'; return; }
+                Object.values(reviews).forEach(rev => {
+                    const card = document.createElement('div'); card.className = 'review-card';
+                    let starHTML = ''; for(let i=1; i<=5; i++) { starHTML += i <= rev.rating ? solidStar : emptyStar; }
+                    let replyHTML = rev.reply ? `<div class="admin-reply"><strong>Moazzam:</strong> ${rev.reply}</div>` : '';
+                    card.innerHTML = `<h5>${rev.name}</h5><div class="review-stars">${starHTML}</div><p>"${rev.message}"</p>${replyHTML}`;
+                    display.appendChild(card);
+                });
             });
         }
 
-        // 🌟 PORTFOLIO WORK GENERATOR ENGINE (Handles live embedded video players & clickable web cards)
-        const defaultPortfolio = [
-            { id: 1, type: 'video', title: 'Cinematic Travel Video', link: 'https://youtube.com' },
-            { id: 2, type: 'web', title: 'E-Commerce Clean Layout', link: 'https://unsplash.com' }
-        ];
-
         function loadPortfolio() {
-            let portfolio = JSON.parse(localStorage.getItem('portfolio')) || defaultPortfolio;
-            displayPortfolio(portfolio);
+            cloudDatabase.ref('portfolio').on('value', function(snapshot) {
+                let portfolio = snapshot.val();
+                if(!portfolio || Object.keys(portfolio).length === 0) {
+                    displayPortfolio([
+                        { id: 1, type: 'video', title: 'Cinematic Travel Video', link: 'https://youtube.com' },
+                        { id: 2, type: 'web', title: 'E-Commerce Clean Layout', link: 'https://unsplash.com' }
+                    ]);
+                } else {
+                    displayPortfolio(Object.values(portfolio));
+                }
+            });
         }
 
         function displayPortfolio(items) {
             const display = document.getElementById('portfolio-display'); display.innerHTML = '';
             items.forEach(item => {
                 const itemDiv = document.createElement('div'); itemDiv.className = 'portfolio-item';
-                
                 if(item.type === 'video') {
-                    let srcLink = item.link; if(srcLink.includes('watch?v=')) srcLink = srcLink.replace('watch?v=', 'embed/');
-                    itemDiv.innerHTML = `
-                        <iframe src="${srcLink}" allowfullscreen style="width:100%; aspect-ratio:16/9; border:none; display:block;"></iframe>
-                        <div class="portfolio-info"><h4>${item.title}</h4><p>Video Showcase Panel</p></div>
-                    `;
+                    let srcLink = item.link;
+                    if(srcLink.match(/\.(mp4|webm|ogg)$/i) || srcLink.includes('data:video')) {
+                        itemDiv.innerHTML = `<video src="${srcLink}" controls style="width:100%; aspect-ratio:16/9; display:block;"></video><div class="portfolio-info"><h4>${item.title}</h4><p>Video Editing Project</p></div>`;
+                    } else {
+                        if(srcLink.includes('watch?v=')) srcLink = srcLink.replace('watch?v=', 'embed/');
+                        itemDiv.innerHTML = `<iframe src="${srcLink}" allowfullscreen style="width:100%; aspect-ratio:16/9; border:none; display:block;"></iframe><div class="portfolio-info"><h4>${item.title}</h4><p>Video Editing Showcase</p></div>`;
+                    }
                 } else {
                     itemDiv.style.cursor = 'pointer';
                     itemDiv.onclick = function() { window.open(item.link, '_blank'); };
-                    itemDiv.innerHTML = `
-                        <img src="https://unsplash.com" alt="${item.title}" onerror="this.src='https://placehold.co'">
-                        <div class="portfolio-info">
-                            <h4>${item.title} <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:var(--accent-color);display:inline-block;margin-left:5px;"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg></h4>
-                            <p style="color:var(--accent-color);">Click to Open Live Project Website</p>
-                        </div>
-                    `;
+                    let previewImg = item.fileData || "https://unsplash.com";
+                    itemDiv.innerHTML = `<img src="${previewImg}" alt="${item.title}" onerror="this.src='https://placehold.co'"><div class="portfolio-info"><h4>${item.title} <svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:var(--accent-color);display:inline-block;margin-left:5px;"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg></h4><p style="color:var(--accent-color);">Click to Open Live Project Website</p></div>`;
                 }
                 display.appendChild(itemDiv);
             });
         }
 
-        function filterPortfolio(type) {
-            const btns = document.querySelectorAll('.tab-btn'); btns.forEach(btn => btn.classList.remove('active')); event.target.classList.add('active');
-            let portfolio = JSON.parse(localStorage.getItem('portfolio')) || defaultPortfolio;
-            if(type === 'all') { displayPortfolio(portfolio); } 
-            else { displayPortfolio(portfolio.filter(item => item.type === type)); }
-        }
-
-        window.onload = function() { loadPortfolio(); loadReviews(); loadHeroBannersSlider(); populateGlobalCountries(); };
+        window.onload = function() { loadPortfolio(); loadReviews(); loadHeroBannersSlider(); };
     </script>
 </body>
 </html>
+a
