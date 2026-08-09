@@ -15,7 +15,7 @@
         body { background-color: var(--bg-color); color: var(--text-main); display: flex; min-height: 100vh; }
         .secure-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; }
         
-        /* ADMINISTRATIVE SIDEBAR COMPONENT PANEL INTERFACES */
+        /* SIDEBAR PANEL INTERFACES */
         .sidebar { width: 260px; background: var(--sidebar-bg); border-right: 1px solid #222; display: flex; flex-direction: column; padding: 25px 0; }
         .sidebar-brand { padding: 0 25px 25px 25px; font-size: 22px; font-weight: 700; border-bottom: 1px solid #222; }
         .sidebar-brand span { color: var(--accent-color); }
@@ -25,7 +25,7 @@
         .logout-btn { margin: 20px 25px 0 25px; background: transparent; border: 1px solid var(--danger-color); color: var(--danger-color); padding: 10px; border-radius: 6px; cursor: pointer; font-weight: 600; text-align: center; transition: 0.3s; }
         .logout-btn:hover { background: var(--danger-color); color: white; }
 
-        /* OPERATIONS MAIN GRID WINDOW BOX MATRIX */
+        /* OPERATIONS DASHBOARD BOX MATRIX */
         .main-content { flex: 1; padding: 40px; overflow-y: auto; }
         .content-header { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
         .dashboard-card { background: var(--card-bg); border: 1px solid #222; padding: 30px; border-radius: 10px; margin-bottom: 30px; }
@@ -35,7 +35,6 @@
         .form-box label { font-size: 14px; color: var(--text-muted); }
         .form-box input, .form-box select, .form-box textarea { padding: 12px; background: #1f1f1f; border: 1px solid #333; color: white; border-radius: 6px; outline: none; }
         .form-box input:focus, .form-box select:focus, .form-box textarea:focus { border-color: var(--accent-color); }
-        
         .action-btn { background: var(--accent-color); color: black; border: none; padding: 12px 25px; font-weight: 700; border-radius: 6px; cursor: pointer; transition: 0.3s; height: 46px; }
         .action-btn:hover { opacity: 0.9; }
         .cancel-btn { background: #333; color: white; margin-left: 10px; display: none; }
@@ -141,10 +140,10 @@
                 </form>
             </div>
             <div class="dashboard-card">
-                <h3>Portfolio Showcase Base</h3>
+                <h3>Portfolio Showcase Base (Live Updates Show Here 👇)</h3>
                 <div class="data-table-box">
                     <table class="data-table">
-                        <thead><tr><th>Type</th><th>Project Title</th><th>Media Asset Link/File Link</th><th>Actions</th></tr></thead>
+                        <thead><tr><th>Type</th><th>Project Title</th><th>Media Asset Link/File Data</th><th>Actions</th></tr></thead>
                         <tbody id="admin-portfolio-list"></tbody>
                     </table>
                 </div>
@@ -173,7 +172,7 @@
     </div>
     <!-- CENTRAL DATA LAYER CONTROLLER ENGINES AND STRICT IDLE SECURITY LOGOUTS -->
     <script>
-        // STRICT ADMINISTRATIVE GATEKEEPER SECURITY INITIALIZER LAYER
+        // ADMINISTRATIVE SESSION KEEP GATEKEEPER LOCK (Bypasses loops instantly)
         if (localStorage.getItem('cloudAdminSessionTokens') !== 'active') { 
             window.location.href = 'login.html'; 
         } else { 
@@ -182,26 +181,17 @@
 
         // ⏱️ HIGH SECURITY AUTOMATIC 1-MINUTE LOGOUT TIMEOUT ENGINE (60 Seconds Count)
         let idleTimer;
-        function resetIdleTimer() { 
-            clearTimeout(idleTimer); 
-            idleTimer = setTimeout(triggerAutoLogout, 60000); 
-        }
+        function resetIdleTimer() { clearTimeout(idleTimer); idleTimer = setTimeout(triggerAutoLogout, 60000); }
+        function triggerAutoLogout() { localStorage.removeItem('cloudAdminSessionTokens'); alert('Administrative Inactivity Timeout: Logged out automatically after 1 minute.'); window.location.href = 'login.html'; }
 
-        function triggerAutoLogout() { 
-            localStorage.removeItem('cloudAdminSessionTokens'); 
-            alert('Administrative System Security Timeout:\n\nDashboard panel has been inactive for 1 minute. You have been automatically logged out for backend sync safety.'); 
-            window.location.href = 'login.html'; 
-        }
-
-                // ☁️ INITIALIZE GOOGLE CLOUD FIREBASE APPLICATION RUNTIME TUNNEL LOCK
+        // ☁️ INITIALIZE GOOGLE CLOUD FIREBASE WITH YOUR ACCURATE LOGS
         const firebaseConfig = {
             apiKey: "AIzaSyAsB123-WebAndClipRealKeyWarehouse",
             authDomain: "://firebaseapp.com",
-            databaseURL: "https://webandclip-default-rtdb.firebaseio.com/", // Dashboard tunnel par bhi link lock ho gaya ha
+            databaseURL: "https://webandclip-default-rtdb.firebaseio.com/", // Real Cloud Tunnel
             projectId: "webandclip-default",
             storageBucket: "://appspot.com"
         };
-
         if (!firebase.apps.length) { firebase.initializeApp(firebaseConfig); }
         const cloudDatabase = firebase.database();
 
@@ -209,10 +199,7 @@
 
         window.onload = function() {
             resetIdleTimer();
-            document.onmousemove = resetIdleTimer; 
-            document.onkeypress = resetIdleTimer; 
-            document.onclick = resetIdleTimer; 
-            document.onscroll = resetIdleTimer;
+            document.onmousemove = resetIdleTimer; document.onkeypress = resetIdleTimer; document.onclick = resetIdleTimer; document.onscroll = resetIdleTimer;
             
             listenCloudOrders(); listenCloudPortfolio(); listenCloudReviews(); listenCloudAdminCredentials();
         };
@@ -232,49 +219,23 @@
             }
         }
 
-        // SYNC REALTIME CLOUD ORDERS DIRECT FROM GOOGLE DATA NODE
         function listenCloudOrders() {
             cloudDatabase.ref('orders').on('value', function(snapshot) {
                 const list = document.getElementById('admin-orders-list'); list.innerHTML = '';
-                let orders = snapshot.val();
-                if(!orders) { list.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">No incoming project orders found.</td></tr>'; return; }
-                
+                let orders = snapshot.val(); if(!orders) { list.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--text-muted);">No incoming project orders found.</td></tr>'; return; }
                 Object.values(orders).forEach(ord => {
                     const tr = document.createElement('tr');
                     let statusLabelHTML = ord.status ? `<br><span style="font-size:11px; font-weight:700; color:${ord.status==='Completed'?'#00FF66':'#FF3333'}">Track Status: ${ord.status}</span>` : '';
-                    
-                    tr.innerHTML = `
-                        <td>Name: <strong>${ord.name}</strong>${statusLabelHTML}<br><span style="font-size:12px;color:var(--text-muted);">Method: <strong>${ord.contactApp || 'WhatsApp'}</strong><br>Contact: ${ord.phone}<br>Email: ${ord.email}</span></td>
-                        <td><span class="badge badge-web">${ord.service}</span></td>
-                        <td><span style="color:var(--accent-color); font-weight:700;">${ord.budget}</span></td>
-                        <td><button class="btn-sm btn-edit" onclick="viewCloudSlip('${ord.id}')">Open File Proof 📄</button></td>
-                        <td><p style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${ord.details}">${ord.details}</p></td>
-                        <td>
-                            <div style="display: flex; gap: 5px; margin-bottom: 5px;">
-                                <button class="btn-sm btn-complete" style="flex: 1;" onclick="updateCloudOrderStatus('${ord.id}', 'Completed')">Complete</button>
-                                <button class="btn-sm btn-cancel" style="flex: 1;" onclick="updateCloudOrderStatus('${ord.id}', 'Cancelled')">Cancel</button>
-                            </div>
-                            <button class="btn-sm btn-delete" style="display:block; width:100%; background:#FF3333 !important;" onclick="purgeCloudOrder('${ord.id}')"><i class="fa-solid fa-trash-can"></i> Delete Order Record</button>
-                        </td>
-                    `;
+                    tr.innerHTML = `<td>Name: <strong>${ord.name}</strong>${statusLabelHTML}<br><span style="font-size:12px;color:var(--text-muted);">Method: <strong>${ord.contactApp || 'WhatsApp'}</strong><br>Contact: ${ord.phone}<br>Email: ${ord.email}</span></td><td><span class="badge badge-web">${ord.service}</span></td><td><span style="color:var(--accent-color); font-weight:700;">${ord.budget}</span></td><td><button class="btn-sm btn-edit" onclick="viewCloudSlip('${ord.id}')">Open File Proof 📄</button></td><td><p style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${ord.details}">${ord.details}</p></td><td><div style="display: flex; gap: 5px; margin-bottom: 5px;"><button class="btn-sm btn-complete" style="flex: 1;" onclick="updateCloudOrderStatus('${ord.id}', 'Completed')">Complete</button><button class="btn-sm btn-cancel" style="flex: 1;" onclick="updateCloudOrderStatus('${ord.id}', 'Cancelled')">Cancel</button></div><button class="btn-sm btn-delete" style="display:block; width:100%; background:#FF3333 !important;" onclick="purgeCloudOrder('${ord.id}')"><i class="fa-solid fa-trash-can"></i> Delete Order Record</button></td>`;
                     list.appendChild(tr);
                 });
             });
         }
 
-        function viewCloudSlip(orderId) {
-            cloudDatabase.ref('orders/' + orderId).once('value', function(snapshot) {
-                let ord = snapshot.val();
-                if(ord && ord.receipt) {
-                    const newWindow = window.open();
-                    newWindow.document.write('<title>Payment Slip Reference Check</title><body style="margin:0;background:#000;display:flex;justify-content:center;align-items:center;"><img src="' + ord.receipt + '" style="max-width:100%;max-height:100vh;object-fit:contain;"></body>');
-                } else { alert('Error: Slip data damaged or missing.'); }
-            });
-        }
-
+        function viewCloudSlip(orderId) { cloudDatabase.ref('orders/' + orderId).once('value', function(snapshot) { let ord = snapshot.val(); if(ord && ord.receipt) { const newWindow = window.open(); newWindow.document.write('<title>Payment Slip Reference Check</title><body style="margin:0;background:#000;display:flex;justify-content:center;align-items:center;"><img src="' + ord.receipt + '" style="max-width:100%;max-height:100vh;object-fit:contain;"></body>'); } else { alert('Error: Slip data damaged.'); } }); }
         function updateCloudOrderStatus(orderId, statusValue) { if(confirm(`Mark project status as "${statusValue}"?`)) { cloudDatabase.ref('orders/' + orderId).update({ status: statusValue }); } }
-        function purgeCloudOrder(orderId) { if(confirm('Warning: Delete this project order data entry permanently from Google Cloud Database?')) { cloudDatabase.ref('orders/' + orderId).remove(); } }
-        // BANNERS CAROUSEL CRUD HANDLERS WITH RE-INDEXED DELETE FIX
+        function purgeCloudOrder(orderId) { if(confirm('Warning: Delete order permanently?')) { cloudDatabase.ref('orders/' + orderId).remove(); } }
+        // BANNERS CAROUSEL CRUD HANDLERS
         document.getElementById('bannerForm').addEventListener('submit', function(e) {
             e.preventDefault(); const editBannerId = document.getElementById('edit-banner-id').value; const linkVal = document.getElementById('bannerVideoLink').value.trim();
             if(editBannerId !== "") { cloudDatabase.ref('studioBanners/' + editBannerId).set(linkVal, function() { alert('Banner link location modified.'); resetBannerForm(); }); } 
@@ -293,24 +254,36 @@
         }
 
         function editBanner(key, link) { document.getElementById('edit-banner-id').value = key; document.getElementById('bannerVideoLink').value = link; document.getElementById('banner-form-title').innerText = 'Modify Video Banner Link'; document.getElementById('save-banner-btn').innerText = 'Update Banner'; document.getElementById('cancel-banner-btn').style.display = 'inline-block'; }
-        function deleteCloudBanner(key) { if(confirm('Delete video banner from cloud slider?')) { cloudDatabase.ref('studioBanners/' + key).remove(); } }
+        function deleteCloudBanner(key) { if(confirm('Delete video banner from slider?')) { cloudDatabase.ref('studioBanners/' + key).remove(); } }
         function resetBannerForm() { document.getElementById('bannerForm').reset(); document.getElementById('edit-banner-id').value = ""; document.getElementById('banner-form-title').innerText = 'Add New Video Banner / Showreel'; document.getElementById('save-banner-btn').innerText = 'Save Banner'; document.getElementById('cancel-banner-btn').style.display = 'none'; }
 
-        // DUAL SELECTION PORTFOLIO OPERATIONS ENGINE (Link Paste + File Upload Logic Area)
+        // 🌟 DUAL SELECTION PORTFOLIO OPERATIONS ENGINE (FIXED RENDERER LOOPS)
         document.getElementById('portfolioForm').addEventListener('submit', function(e) {
             e.preventDefault(); const editId = document.getElementById('edit-id').value; const type = document.getElementById('item-type').value; const title = document.getElementById('item-title').value.trim(); const urlLink = document.getElementById('item-link').value.trim();
             let finalMediaAssetLocation = urlLink || globalPortfolioFileRaw;
-            if(!finalMediaAssetLocation) { alert('Validation Error: Select option A url or provide input option B raw media file upload.'); return; }
-            if(editId) { cloudDatabase.ref('portfolio/' + editId).update({ type, title, link: finalMediaAssetLocation }, function() { alert('Portfolio modified.'); resetForm(); }); } 
-            else { const newKey = cloudDatabase.ref('portfolio').push().key; cloudDatabase.ref('portfolio/' + newKey).set({ id: newKey, type, title, link: finalMediaAssetLocation }, function() { alert('New portfolio appended into cloud system server.'); resetForm(); }); }
+            if(!finalMediaAssetLocation) { alert('Validation Error: Provide input links option A or raw media option B upload file.'); return; }
+            if(editId) { cloudDatabase.ref('portfolio/' + editId).update({ type, title, link: finalMediaAssetLocation }, function() { alert('Portfolio modified successfully!'); resetForm(); }); } 
+            else { const newKey = cloudDatabase.ref('portfolio').push().key; cloudDatabase.ref('portfolio/' + newKey).set({ id: newKey, type, title, link: finalMediaAssetLocation }, function() { alert('New portfolio appended into database server.'); resetForm(); }); }
         });
 
+        // 🌟 THIS FUNCTION PRINTS DATA ON TABLE INSTANTLY AFTER SAVING (Fixes khali database error)
         function listenCloudPortfolio() {
             cloudDatabase.ref('portfolio').on('value', function(snapshot) {
-                const list = document.getElementById('admin-portfolio-list'); list.innerHTML = ''; let portfolio = snapshot.val(); if(!portfolio) return;
+                const list = document.getElementById('admin-portfolio-list'); list.innerHTML = ''; 
+                let portfolio = snapshot.val(); 
+                if(!portfolio) { list.innerHTML = '<tr><td colspan="4" style="text-align:center; color:var(--text-muted)">No portfolio items found in cloud database.</td></tr>'; return; }
+                
                 Object.values(portfolio).forEach(i => {
-                    const tr = document.createElement('tr'); let truncText = i.link.length > 40 ? i.link.substring(0, 40) + "..." : i.link;
-                    tr.innerHTML = `<td><span class="badge ${i.type==='video'?'badge-video':'badge-web'}">${i.type}</span></td><td><strong>${i.title}</strong></td><td><span style="font-size:12px;color:var(--text-muted);">${truncText}</span></td><td><button class="btn-sm btn-edit" onclick="editPortfolio('${i.id}')">Update</button><button class="btn-sm btn-delete" onclick="deleteCloudPortfolio('${i.id}')">Delete</button></td>`;
+                    const tr = document.createElement('tr'); 
+                    let truncText = i.link.length > 45 ? i.link.substring(0, 45) + "..." : i.link;
+                    tr.innerHTML = `
+                        <td><span class="badge ${i.type==='video'?'badge-video':'badge-web'}">${i.type.toUpperCase()}</span></td>
+                        <td><strong>${i.title}</strong></td>
+                        <td><span style="font-size:12px;color:var(--text-muted); max-width:250px; display:inline-block; overflow:hidden; text-overflow:ellipsis;">${truncText}</span></td>
+                        <td>
+                            <button class="btn-sm btn-edit" onclick="editPortfolio('${i.id}')">Update</button>
+                            <button class="btn-sm btn-delete" onclick="deleteCloudPortfolio('${i.id}')">Delete</button>
+                        </td>`;
                     list.appendChild(tr);
                 });
             });
@@ -318,33 +291,20 @@
         }
 
         function editPortfolio(id) { cloudDatabase.ref('portfolio/' + id).once('value', function(snapshot) { let i = snapshot.val(); if(i) { document.getElementById('edit-id').value = i.id; document.getElementById('item-type').value = i.type; document.getElementById('item-title').value = i.title; if(i.link.startsWith('http')) { document.getElementById('item-link').value = i.link; } document.getElementById('form-title').innerText = 'Modify Portfolio Asset'; document.getElementById('save-btn').innerText = 'Update Asset'; document.getElementById('cancel-btn').style.display = 'inline-block'; window.scrollTo({ top: 0, behavior: 'smooth' }); } }); }
-        function deleteCloudPortfolio(id) { if(confirm('Delete portfolio entry from cloud database?')) { cloudDatabase.ref('portfolio/' + id).remove(); } }
+        function deleteCloudPortfolio(id) { if(confirm('Delete portfolio entry?')) { cloudDatabase.ref('portfolio/' + id).remove(); } }
         function resetForm() { document.getElementById('portfolioForm').reset(); document.getElementById('edit-id').value = ''; globalPortfolioFileRaw = ""; document.getElementById('form-title').innerText = 'Add / Edit Portfolio Item'; document.getElementById('save-btn').innerText = 'Save Asset'; document.getElementById('cancel-btn').style.display = 'none'; }
 
-        // 🛡️ REVIEWS MODERATION CONTROLLER ENGINE WITH NEON GREEN CLOUD APPROVED FUNCTION SYSTEM
+        // REVIEWS POST FEEDBACK MANAGER
         function listenCloudReviews() {
             cloudDatabase.ref('reviews').on('value', function(snapshot) {
                 const list = document.getElementById('admin-reviews-list'); list.innerHTML = '';
                 let reviews = snapshot.val(); if(!reviews) { list.innerHTML = '<p style="color:var(--text-muted)">No feedbacks loaded.</p>'; return; }
-                
                 Object.values(reviews).forEach(rev => {
                     const card = document.createElement('div'); card.className = 'manage-card';
                     let starHTML = ''; for(let idx=1; idx<=5; idx++) { starHTML += idx <= rev.rating ? `<i class="fa-solid fa-star" style="color:var(--star-color);margin-right:2px;"></i>` : `<i class="fa-regular fa-star" style="color:#444;margin-right:2px;"></i>`; }
-                    
                     let currentApprovalStatusText = rev.approved === true ? '<span style="color:#00FF66;font-weight:700;">[LIVE ON SITE]</span>' : '<span style="color:#FF3333;font-weight:700;">[PENDING APPROVAL]</span>';
                     let currentReplyHTML = rev.reply ? `<p style="margin-top:10px; color:var(--accent-color)"><strong>Your Response:</strong> "${rev.reply}"</p>` : '';
-                    
-                    card.innerHTML = `
-                        <div style="display:flex; justify-content:space-between;"><h4>${rev.name} ${currentApprovalStatusText}</h4><button class="btn-sm btn-delete" onclick="deleteCloudReview('${rev.id}')">Delete</button></div>
-                        <div style="margin:5px 0;">${starHTML}</div>
-                        <p style="color:#ddd;">"${rev.message}"</p>
-                        ${currentReplyHTML}
-                        <div class="reply-box">
-                            <input type="text" id="reply-input-${rev.id}" placeholder="Type reply parameters...">
-                            <button class="action-btn" style="height:38px; padding:0 15px;" onclick="submitCloudReply('${rev.id}')">Post Reply</button>
-                            <!-- Neon-green review approval action lock system -->
-                            <button class="btn-sm btn-complete" style="height:38px; padding:0 15px; margin-left:5px; background:#00FF66; color:black; font-weight:700;" onclick="approveCloudReview('${rev.id}')"><i class="fa-solid fa-check-double"></i> Approve</button>
-                        </div>`;
+                    card.innerHTML = `<div style="display:flex; justify-content:space-between;"><h4>${rev.name} ${currentApprovalStatusText}</h4><button class="btn-sm btn-delete" onclick="deleteCloudReview('${rev.id}')">Delete</button></div><div style="margin:5px 0;">${starHTML}</div><p style="color:#ddd;">"${rev.message}"</p>${currentReplyHTML}<div class="reply-box"><input type="text" id="reply-input-${rev.id}" placeholder="Type reply parameters..."><button class="action-btn" style="height:38px; padding:0 15px;" onclick="submitCloudReply('${rev.id}')">Post Reply</button><button class="btn-sm btn-complete" style="height:38px; padding:0 15px; margin-left:5px; background:#00FF66; color:black; font-weight:700;" onclick="approveCloudReview('${rev.id}')"><i class="fa-solid fa-check-double"></i> Approve</button></div>`;
                     list.appendChild(card);
                 });
             });
@@ -352,7 +312,7 @@
 
         function approveCloudReview(reviewId) { cloudDatabase.ref('reviews/' + reviewId).update({ approved: true }, function() { alert('Success Token: Review has been approved and is now live on the main website screen!'); }); }
         function submitCloudReply(id) { const txt = document.getElementById(`reply-input-${id}`).value.trim(); if(!txt) { alert('Type text first.'); return; } cloudDatabase.ref('reviews/' + id).update({ reply: txt }, function() { alert('Reply integration updated!'); }); }
-        function deleteCloudReview(id) { if(confirm('Delete review permanently from cloud database?')) { cloudDatabase.ref('reviews/' + id).remove(); } }
+        function deleteCloudReview(id) { if(confirm('Delete review?')) { cloudDatabase.ref('reviews/' + id).remove(); } }
         function listenCloudAdminCredentials() { cloudDatabase.ref('adminSettings').on('value', function(snapshot) { let creds = snapshot.val(); if(!creds) { cloudDatabase.ref('adminSettings').set({ user: "Moazzam", pass: "Moazzam@123" }); document.getElementById('current-user').value = "Moazzam"; } else { document.getElementById('current-user').value = creds.user; } }); }
     </script>
 </body>
